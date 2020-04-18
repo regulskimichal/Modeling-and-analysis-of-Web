@@ -1,0 +1,12 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/postgres
+    password: postgres
+    username: postgres
+
+server:
+  error:
+    include-stacktrace: always
+
+pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed
+webPageTestUrl: http://www.webpagetest.org/runtest.php

@@ -1,0 +1,8 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://postgres:5432/postgres
+    password: postgres
+    username: postgres
+
+pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed
+webPageTestUrl: http://www.webpagetest.org/runtest.php
