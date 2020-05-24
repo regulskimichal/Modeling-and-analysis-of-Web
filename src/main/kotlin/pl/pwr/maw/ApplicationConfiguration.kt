@@ -6,8 +6,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.web.reactive.function.client.WebClient
-import pl.pwr.maw.utils.JSR374Module
-
 
 @Configuration
 @EnableScheduling
@@ -22,8 +20,5 @@ class ApplicationConfiguration {
             .csrf().disable()
             .build()
     }
-
-    @Bean
-    fun jsr374Module() = JSR374Module()
 
 }

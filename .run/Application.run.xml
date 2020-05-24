@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="Application" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot">
+        <module name="maw.main"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="pl.pwr.maw.Application"/>
+        <option name="ALTERNATIVE_JRE_PATH"/>
+        <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateTriggerFile"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

@@ -15,6 +15,7 @@ pluginManagement {
         eachPlugin {
             when (requested.id.id) {
                 "org.springframework.boot" -> useModule("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+                "io.spring.dependency-management" -> useModule("io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE")
                 "org.jetbrains.kotlin.jvm" -> useVersion(kotlinVersion)
                 "org.jetbrains.kotlin.plugin.spring" -> useVersion(kotlinVersion)
                 "org.jetbrains.kotlin.plugin.jpa" -> useVersion(kotlinVersion)
