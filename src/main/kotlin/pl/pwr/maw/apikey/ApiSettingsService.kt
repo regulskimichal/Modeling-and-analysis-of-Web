@@ -23,7 +23,7 @@ class ApiSettingsService(
             if (isApiName(apiSettings.apiName)) {
                 apiSettingsRepository.save(apiSettings).then().awaitFirstOrNull()
             } else {
-                throw IllegalArgumentException()
+                throw NoSuchApiDefinedException()
             }
         }
     }
