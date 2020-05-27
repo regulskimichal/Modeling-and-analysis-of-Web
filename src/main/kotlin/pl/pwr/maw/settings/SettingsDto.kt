@@ -6,16 +6,16 @@ import java.time.ZoneId
 data class SettingsDto(
     val id: Long?,
     val pageUrl: String,
-    val apis: List<Long>,
+    val api: Long,
     val strategy: Strategy,
     val cronExpression: String,
     val zoneId: ZoneId,
     val jsonPathExpression: String?
 ) {
-    fun toEntity(apis: Set<Api>, id: Long? = null) = Settings(
+    fun toEntity(api: Api, id: Long? = null) = Settings(
         id,
         pageUrl,
-        apis,
+        api,
         strategy,
         cronExpression,
         zoneId,

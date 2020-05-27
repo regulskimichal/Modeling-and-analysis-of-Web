@@ -14,7 +14,7 @@ class ApiController(
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun getAvailableApis(): List<Api> {
-        return apiKeyService.getApis()
+        return apiKeyService.getAllApi()
     }
 
     @PostMapping("/{id}/key")
