@@ -1,12 +1,24 @@
+server:
+  port: 8080
+  error:
+    include-stacktrace: never
+
 spring:
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5432/postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
     password: postgres
     username: postgres
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        generate_statistics: true
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-server:
-  error:
-    include-stacktrace: always
-
-pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed
-webPageTestUrl: http://www.webpagetest.org/runtest.php
+api:
+  pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed
+  webPageTestUrl: http://www.webpagetest.org/runtest.php

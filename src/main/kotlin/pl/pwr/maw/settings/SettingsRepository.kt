@@ -1,7 +1,7 @@
-package pl.pwr.maw.measurement
+package pl.pwr.maw.settings
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface MeasurementRepository : JpaRepository<MeasurementResult, Long>
+interface SettingsRepository : JpaRepository<Settings, Long>

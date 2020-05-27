@@ -1,25 +1,24 @@
 package pl.pwr.maw.measurement
 
-import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.bodyToMono
-import org.springframework.web.util.UriComponentsBuilder
-import pl.pwr.maw.apikey.ApiSettingsService
-import pl.pwr.maw.measurementsettings.Api
-import pl.pwr.maw.measurementsettings.Strategy
-import pl.pwr.maw.model.pagespeed.PagespeedApiPagespeedResponseV5
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.client.RestTemplate
+import pl.pwr.maw.api.ApiService
 
 @Service
+@Transactional(readOnly = true)
 class PageSpeedMeasurer(
-    @Value("\${pageSpeedInsightsUrl}") private val pageSpeedInsightsUrl: String,
-    private val webClient: WebClient,
+    @Value("\${api.pageSpeedInsightsUrl}") private val pageSpeedInsightsUrl: String,
+    private val restTemplate: RestTemplate,
     private val measurementRepository: MeasurementRepository,
-    private val apiSettingsService: ApiSettingsService
+    private val apiService: ApiService
 ) : PerformanceMeasurer {
 
-    /*suspend fun getResults(url: String): Measurement? {
+    override fun preformMeasurement(url: String, runs: Int, firstViewOnly: Boolean): MeasurementResult? =
+        TODO("Not yet implemented")
+
+    /*fun getResults(url: String): Measurement? {
         val uri = UriComponentsBuilder.fromHttpUrl(pageSpeedInsightsUrl)
             .queryParam("key", apiSettingsService.getApiKey(Api.PAGE_SPEED))
             .queryParam("url", url)

@@ -1,6 +1,6 @@
 package pl.pwr.maw.measurement
 
-import pl.pwr.maw.measurementsettings.Strategy
+import pl.pwr.maw.settings.Strategy
 import java.time.Instant
 
 data class MeasurementDto(
@@ -11,5 +11,6 @@ data class MeasurementDto(
     val analysisTime: Instant,
     val loadingTime: Double
 ) {
-    fun toEntity(id: Long? = null) = Measurement(id, url, resultType, strategy, userAgent, analysisTime, loadingTime)
+    fun toEntity(id: Long? = null) =
+        MeasurementResult(id, url, resultType, strategy, userAgent, analysisTime, loadingTime)
 }

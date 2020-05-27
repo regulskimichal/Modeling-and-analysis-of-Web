@@ -1,0 +1,12 @@
+{
+  "properties": [
+    {
+      "name": "api.pageSpeedInsightsUrl",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "api.webPageTestUrl",
+      "type": "java.lang.String"
+    }
+  ]
+}
