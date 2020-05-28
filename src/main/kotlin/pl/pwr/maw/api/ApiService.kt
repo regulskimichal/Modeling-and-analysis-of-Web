@@ -11,25 +11,21 @@ class ApiService(
     private val apiRepository: ApiRepository
 ) {
 
-    fun getApis(): List<Api> {
-        return apiRepository.findAll()
+    fun getAllApi(): List<Api> {
+        return apiRepository.findAllByOrderByIdAsc()
     }
 
-    fun getApis(ids: List<Long>): Set<Api> {
-        return apiRepository.findAllById(ids).toSet()
+    fun getApi(id: Long): Api {
+        return apiRepository.findById(id).orElseThrow { EntityNotFoundException<Api>(id) }
     }
 
     @Transactional
     fun saveApiKey(id: Long, apiKeyDto: ApiKeyDto): Api {
-        val api: Api = apiRepository.findById(id).orElseThrow {
-            EntityNotFoundException<Api>(
-                id
-            )
+        return getApi(id).also {
+            it.apiKey = apiKeyDto.apiKey
+            apiRepository.save(it)
+            log.debug("Updated API key: $it")
         }
-        api.apiKey = apiKeyDto.apiKey
-        val saved = apiRepository.save(api)
-        log.debug("Updated API key: $saved")
-        return saved
     }
 
     companion object {

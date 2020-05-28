@@ -14,12 +14,8 @@ data class Settings(
 
     var pageUrl: String,
 
-    @ManyToMany(cascade = [CascadeType.MERGE, CascadeType.PERSIST])
-    @JoinTable(
-        joinColumns = [JoinColumn(name = "setting_id")],
-        inverseJoinColumns = [JoinColumn(name = "api_id")]
-    )
-    var apis: Set<Api>,
+    @ManyToOne
+    var api: Api,
 
     var strategy: Strategy,
 
@@ -29,5 +25,5 @@ data class Settings(
 
     var jsonPathExpression: String? = null
 ) {
-    fun toDto() = SettingsDto(id, pageUrl, apis.map { it.id }, strategy, cronExpression, zoneId, jsonPathExpression)
+    fun toDto() = SettingsDto(id, pageUrl, api.id, strategy, cronExpression, zoneId, jsonPathExpression)
 }

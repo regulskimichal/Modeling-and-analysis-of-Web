@@ -39,14 +39,14 @@ class SettingsService(
 
     @Transactional
     fun saveSettings(settingsDto: SettingsDto): Settings {
-        val apis = apiService.getApis(settingsDto.apis)
+        val apis = apiService.getApi(settingsDto.api)
         return save(settingsDto.toEntity(apis))
     }
 
     @Transactional
     fun updateSettings(id: Long, settingsDto: SettingsDto): Settings {
         if (settingsRepository.existsById(id)) {
-            val apis = apiService.getApis(settingsDto.apis)
+            val apis = apiService.getApi(settingsDto.api)
             return save(settingsDto.toEntity(apis, id))
         } else {
             throw EntityNotFoundException<Settings>(id)

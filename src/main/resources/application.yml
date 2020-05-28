@@ -19,6 +19,10 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+logging:
+  level:
+    pl.pwr.maw: debug
+
 api:
   pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed
   webPageTestUrl: http://www.webpagetest.org/runtest.php

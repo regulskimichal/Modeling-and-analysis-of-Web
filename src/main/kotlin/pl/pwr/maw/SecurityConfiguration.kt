@@ -21,4 +21,5 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
                 "/swagger-ui.html/**"
             )
     }
+
 }
