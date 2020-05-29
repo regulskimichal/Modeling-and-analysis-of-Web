@@ -1,23 +1,50 @@
 <div class="grid-container">
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{card.title}}
-            <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+    <mat-grid-list cols="1">
+        <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+            <mat-card class="dashboard-card">
+                <mat-card-header>
+                    <mat-card-title>
+                        {{card.title}}
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="id">
+                            <mat-header-cell *matHeaderCellDef> ID</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="api_key">
+                            <mat-header-cell *matHeaderCellDef> API KEYS</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.apiKey}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="url">
+                            <mat-header-cell *matHeaderCellDef> URL</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.url}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cron_expression">
+                            <mat-header-cell *matHeaderCellDef> CRON EXPRESSION</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.cronExpression}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="location">
+                            <mat-header-cell *matHeaderCellDef> LOCATION</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.location}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="user_agent">
+                            <mat-header-cell *matHeaderCellDef> USER AGENT</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.userAgent}} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
 </div>
