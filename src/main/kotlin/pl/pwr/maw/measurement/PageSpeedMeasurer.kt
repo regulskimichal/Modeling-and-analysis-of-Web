@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
-import pl.pwr.maw.api.ApiService
+import pl.pwr.maw.api.ApiKeyService
 
 @Service
 @Transactional(readOnly = true)
@@ -12,7 +12,7 @@ class PageSpeedMeasurer(
     @Value("\${api.pageSpeedInsightsUrl}") private val pageSpeedInsightsUrl: String,
     private val restTemplate: RestTemplate,
     private val measurementRepository: MeasurementRepository,
-    private val apiService: ApiService
+    private val apiKeyService: ApiKeyService
 ) : PerformanceMeasurer {
 
     override fun preformMeasurement(url: String, runs: Int, firstViewOnly: Boolean): MeasurementResult? =

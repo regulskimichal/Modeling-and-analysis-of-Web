@@ -1,3 +1,3 @@
-insert into apis(id, name, api_key)
-values (1, 'WEB_PAGE_TEST', null),
-       (2, 'PAGE_SPEED', null);
+insert into api_keys(id, name, type, api_key, default_key)
+values (1, 'Default WebPageTest', 'WEB_PAGE_TEST', null, true),
+       (2, 'Default PageSpeed', 'PAGE_SPEED', null, true);

@@ -1,4 +1,4 @@
-package pl.pwr.maw.exception
+package pl.pwr.maw.commons
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
