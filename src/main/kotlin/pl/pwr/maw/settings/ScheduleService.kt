@@ -1,9 +1,9 @@
 package pl.pwr.maw.settings
 
-import org.slf4j.LoggerFactory
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.support.CronTrigger
 import org.springframework.stereotype.Service
+import pl.pwr.maw.commons.logger
 import java.util.TimeZone
 import java.util.concurrent.ScheduledFuture
 
@@ -37,7 +37,7 @@ class ScheduleService(
     }
 
     companion object {
-        private val log = LoggerFactory.getLogger(ScheduleService::class.java)
+        private val log by logger<ScheduleService>()
     }
 
 }

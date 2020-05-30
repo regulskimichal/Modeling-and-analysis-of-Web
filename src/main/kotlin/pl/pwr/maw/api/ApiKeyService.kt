@@ -1,10 +1,10 @@
 package pl.pwr.maw.api
 
-import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.pwr.maw.commons.EntityNotFoundException
+import pl.pwr.maw.commons.logger
 
 @Service
 @Transactional(readOnly = true)
@@ -50,7 +50,7 @@ class ApiKeyService(
             it.defaultKey = apiKey.defaultKey
         }
         apiKeyRepository.save(persistedApiKey)
-        log.debug("Updated API key: $persistedApiKey")
+        log.debug("Updatelod API key: $persistedApiKey")
     }
 
     private fun changeDefaultKey(apiKeyType: ApiKeyType) {
@@ -76,7 +76,7 @@ class ApiKeyService(
     }
 
     companion object {
-        private val log = LoggerFactory.getLogger(ApiKeyService::class.java)
+        private val log by logger<ApiKeyService>()
     }
 
 }

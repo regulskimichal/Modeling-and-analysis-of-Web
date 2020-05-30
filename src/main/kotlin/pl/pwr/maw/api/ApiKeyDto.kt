@@ -1,13 +1,33 @@
 package pl.pwr.maw.api
 
-data class ApiKeyDto(
-    val name: String,
-    val apiKey: String,
-    val defaultKey: Boolean = false,
-    val type: ApiKeyType
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes(
+    JsonSubTypes.Type(WebPageTestApiKeyDto::class, name = ApiKeyType.WEB_PAGE_TEST_NAME),
+    JsonSubTypes.Type(PageSpeedApiKeyDto::class, name = ApiKeyType.PAGE_SPEED_NAME)
+)
+sealed class ApiKeyDto(
+    open val name: String,
+    open val apiKey: String,
+    open val defaultKey: Boolean = false
 ) {
-    fun toEntity(id: Long? = null): ApiKey = when (type) {
-        ApiKeyType.WEB_PAGE_TEST -> WebPageTestApiKey(id, name, apiKey, defaultKey)
-        ApiKeyType.PAGE_SPEED -> PageSpeedApiKey(id, name, apiKey, defaultKey)
-    }
+    abstract fun toEntity(id: Long? = null): ApiKey
+}
+
+data class WebPageTestApiKeyDto(
+    override val name: String,
+    override val apiKey: String,
+    override val defaultKey: Boolean = false
+) : ApiKeyDto(name, apiKey, defaultKey) {
+    override fun toEntity(id: Long?): WebPageTestApiKey = WebPageTestApiKey(id, name, apiKey, defaultKey)
+}
+
+data class PageSpeedApiKeyDto(
+    override val name: String,
+    override val apiKey: String,
+    override val defaultKey: Boolean = false
+) : ApiKeyDto(name, apiKey, defaultKey) {
+    override fun toEntity(id: Long?): ApiKey = PageSpeedApiKey(id, name, apiKey, defaultKey)
 }

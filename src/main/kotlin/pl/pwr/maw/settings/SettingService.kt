@@ -1,6 +1,5 @@
 package pl.pwr.maw.settings
 
-import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.support.CronSequenceGenerator
 import org.springframework.stereotype.Service
@@ -9,6 +8,7 @@ import pl.pwr.maw.api.ApiKeyService
 import pl.pwr.maw.commons.EntityNotFoundException
 import pl.pwr.maw.commons.events.DeregisterEvent
 import pl.pwr.maw.commons.events.RegisterEvent
+import pl.pwr.maw.commons.logger
 
 @Service
 @Transactional(readOnly = true)
@@ -29,14 +29,14 @@ class SettingService(
 
     @Transactional
     fun saveSetting(settingDto: SettingDto): Setting {
-        val apis = apiKeyService.getApiKey(settingDto.api)
+        val apis = apiKeyService.getApiKey(settingDto.apiKeyId)
         return save(settingDto.toEntity(apis))
     }
 
     @Transactional
     fun updateSetting(id: Long, settingDto: SettingDto): Setting {
         if (settingRepository.existsById(id)) {
-            val apis = apiKeyService.getApiKey(settingDto.api)
+            val apis = apiKeyService.getApiKey(settingDto.apiKeyId)
             return save(settingDto.toEntity(apis, id))
         } else {
             throw EntityNotFoundException<Setting>(id)
@@ -69,7 +69,7 @@ class SettingService(
     }
 
     companion object {
-        private val log = LoggerFactory.getLogger(SettingService::class.java)
+        private val log by logger<ScheduleService>()
     }
 
 }

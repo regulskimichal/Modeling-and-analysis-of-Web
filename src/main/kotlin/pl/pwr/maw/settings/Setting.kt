@@ -1,7 +1,6 @@
 package pl.pwr.maw.settings
 
 import pl.pwr.maw.api.ApiKey
-import pl.pwr.maw.api.WebPageTestApiKey
 import java.time.ZoneId
 import javax.persistence.*
 
@@ -15,10 +14,15 @@ sealed class Setting(
 
     open var pageUrl: String,
 
+    @ManyToOne
+    open var apiKey: ApiKey,
+
     open var cronExpression: String,
 
     open var zoneId: ZoneId
-) : ApiKeyProvider
+) {
+    abstract fun toDto(): SettingResponseDto
+}
 
 @Entity
 @Table(name = "web_page_test_settings")
@@ -28,12 +32,14 @@ data class WebPageTestSetting(
     override var pageUrl: String,
 
     @ManyToOne
-    override var apiKey: WebPageTestApiKey,
+    override var apiKey: ApiKey,
 
     override var cronExpression: String,
 
     override var zoneId: ZoneId
-) : Setting(id, pageUrl, cronExpression, zoneId)
+) : Setting(id, pageUrl, apiKey, cronExpression, zoneId) {
+    override fun toDto() = WebPageTestSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
+}
 
 @Entity
 @Table(name = "page_speed_settings")
@@ -48,4 +54,6 @@ data class PageSpeedSetting(
     override var cronExpression: String,
 
     override var zoneId: ZoneId
-) : Setting(id, pageUrl, cronExpression, zoneId)
+) : Setting(id, pageUrl, apiKey, cronExpression, zoneId) {
+    override fun toDto() = PageSpeedSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
+}

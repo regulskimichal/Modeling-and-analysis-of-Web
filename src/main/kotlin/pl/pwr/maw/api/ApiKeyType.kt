@@ -5,6 +5,8 @@ enum class ApiKeyType {
 
     companion object {
         val values: Collection<ApiKeyType> = values().asList()
+        const val WEB_PAGE_TEST_NAME = "WEB_PAGE_TEST"
+        const val PAGE_SPEED_NAME = "PAGE_SPEED"
     }
 
 }

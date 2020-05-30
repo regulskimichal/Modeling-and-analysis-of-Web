@@ -14,20 +14,20 @@ class SettingController(
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getSettings(@PathVariable id: Long): SettingDto {
-        return TODO() // settingService.getSetting(id).toDto()
+    fun getSettings(@PathVariable id: Long): SettingResponseDto {
+        return settingService.getSetting(id).toDto()
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getAllSettings(): List<SettingDto> {
-        return TODO() // settingService.getAllSettings().map { it.toDto() }
+    fun getAllSettings(): List<SettingResponseDto> {
+        return settingService.getAllSettings().map { it.toDto() }
     }
 
     @PostMapping(consumes = [APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveSettings(@RequestBody settingDao: SettingDto): SettingDto {
-        return TODO() // settingService.saveSetting(settingDao).toDto()
+    fun saveSettings(@RequestBody settingDto: SettingDto): SettingResponseDto {
+        return settingService.saveSetting(settingDto).toDto()
     }
 
     @PutMapping("/{id}", consumes = [APPLICATION_JSON_VALUE])
@@ -35,8 +35,8 @@ class SettingController(
     fun updateSettings(
         @PathVariable id: Long,
         @RequestBody settingDto: SettingDto
-    ): SettingDto {
-        return TODO() // settingService.updateSetting(id, settingDto).toDto()
+    ): SettingResponseDto {
+        return settingService.updateSetting(id, settingDto).toDto()
     }
 
     @DeleteMapping("/{id}")
