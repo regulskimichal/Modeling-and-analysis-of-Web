@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -25,6 +26,9 @@ class ApplicationContext {
         return OpenAPI()
             .info(Info().title("Page Measurer API").version("1"))
     }
+
+    @Bean
+    fun webClient(webClientBuilder: WebClient.Builder) = webClientBuilder.build()
 
     @Bean
     fun corsConfigurer(): WebMvcConfigurer? {

@@ -6,7 +6,7 @@ import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/settings")
+@RequestMapping("/setting")
 @Tag(name = "Settings")
 class SettingController(
     private val settingService: SettingService
@@ -27,7 +27,7 @@ class SettingController(
     @PostMapping(consumes = [APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun saveSettings(@RequestBody settingDto: SettingDto): SettingResponseDto {
-        return settingService.saveSetting(settingDto).toDto()
+        return settingService.saveSetting(settingDto.toEntity(), settingDto.apiKeyId).toDto()
     }
 
     @PutMapping("/{id}", consumes = [APPLICATION_JSON_VALUE])
@@ -36,7 +36,7 @@ class SettingController(
         @PathVariable id: Long,
         @RequestBody settingDto: SettingDto
     ): SettingResponseDto {
-        return settingService.updateSetting(id, settingDto).toDto()
+        return settingService.updateSetting(id, settingDto.toEntity(), settingDto.apiKeyId).toDto()
     }
 
     @DeleteMapping("/{id}")

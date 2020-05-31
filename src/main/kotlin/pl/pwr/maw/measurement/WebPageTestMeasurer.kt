@@ -4,24 +4,23 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
-import pl.pwr.maw.api.ApiKeyService
 import pl.pwr.maw.model.webpagetest.WebPageTestInitResponse
 import pl.pwr.maw.model.webpagetest.WebPageTestResponse
+import pl.pwr.maw.settings.WebPageTestSetting
 
 @Service
 class WebPageTestMeasurer(
     @Value("\${api.webPageTestUrl}") private val webPageTestUrl: String,
-    private val apiKeyService: ApiKeyService,
     private val restTemplate: RestTemplate
-) : PerformanceMeasurer {
+) : PerformanceMeasurer<WebPageTestSetting> {
 
-    override fun preformMeasurement(url: String, runs: Int, firstViewOnly: Boolean): MeasurementResult? {
+    override fun preformMeasurement(setting: WebPageTestSetting): WebPageTestMeasurement {
         val uri = UriComponentsBuilder.fromHttpUrl(webPageTestUrl)
-            .queryParam("url", url)
-            //.queryParam("k", apiService.getApiKey(Api.WEB_PAGE_TEST_ID).apiKey)
+            .queryParam("url", setting.pageUrl)
+            .queryParam("k", setting.apiKey)
             .queryParam("f", "json")
-            .queryParam("runs", runs)
-            .queryParam("fvonly", if (firstViewOnly) 1 else 0)
+            //.queryParam("runs", TODO())
+            //.queryParam("fvonly", TODO())
             .build().toUri()
 
         return restTemplate.getForObject(uri, WebPageTestInitResponse::class.java)?.let { webPageTestInitResponse ->
@@ -31,9 +30,9 @@ class WebPageTestMeasurer(
             )?.let { webPageTestResponse ->
                 asMeasurement(webPageTestResponse)
             }
-        }
+        }!!
     }
 
-    private fun asMeasurement(response: WebPageTestResponse): MeasurementResult = TODO()
+    private fun asMeasurement(response: WebPageTestResponse): WebPageTestMeasurement = TODO()
 
 }

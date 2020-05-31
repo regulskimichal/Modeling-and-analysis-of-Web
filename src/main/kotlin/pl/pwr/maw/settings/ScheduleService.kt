@@ -4,12 +4,14 @@ import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.support.CronTrigger
 import org.springframework.stereotype.Service
 import pl.pwr.maw.commons.logger
+import pl.pwr.maw.measurement.DefaultPerformanceMeasurer
 import java.util.TimeZone
 import java.util.concurrent.ScheduledFuture
 
 @Service
 class ScheduleService(
-    private val taskScheduler: TaskScheduler
+    private val taskScheduler: TaskScheduler,
+    private val performanceMeasurer: DefaultPerformanceMeasurer
 ) {
 
     private val scheduledTasks = mutableMapOf<Long, ScheduledFuture<*>>()
@@ -20,8 +22,7 @@ class ScheduleService(
         if (settingsId != null) {
             val task = Runnable {
                 log.debug("Running task")
-                //TODO
-                //webPageTestMeasurer.performMeasurement(settings.pageUrl)
+                performanceMeasurer.preformMeasurement(setting)
             }
 
             val trigger = CronTrigger(setting.cronExpression, TimeZone.getTimeZone(setting.zoneId))

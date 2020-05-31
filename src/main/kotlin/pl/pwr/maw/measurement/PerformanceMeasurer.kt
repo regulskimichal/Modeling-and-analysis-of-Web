@@ -1,7 +1,7 @@
 package pl.pwr.maw.measurement
 
-interface PerformanceMeasurer {
+import pl.pwr.maw.settings.Setting
 
-    fun preformMeasurement(url: String, runs: Int = 1, firstViewOnly: Boolean = false): MeasurementResult?
-
+interface PerformanceMeasurer<T : Setting> {
+    fun preformMeasurement(setting: T): Measurement
 }

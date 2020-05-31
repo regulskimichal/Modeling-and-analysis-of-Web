@@ -5,6 +5,9 @@ import org.springframework.scheduling.support.CronSequenceGenerator
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.pwr.maw.api.ApiKeyService
+import pl.pwr.maw.api.InvalidApiType
+import pl.pwr.maw.api.PageSpeedApiKey
+import pl.pwr.maw.api.WebPageTestApiKey
 import pl.pwr.maw.commons.EntityNotFoundException
 import pl.pwr.maw.commons.events.DeregisterEvent
 import pl.pwr.maw.commons.events.RegisterEvent
@@ -28,18 +31,46 @@ class SettingService(
     }
 
     @Transactional
-    fun saveSetting(settingDto: SettingDto): Setting {
-        val apis = apiKeyService.getApiKey(settingDto.apiKeyId)
-        return save(settingDto.toEntity(apis))
+    fun saveSetting(setting: Setting, apiKeyId: Long): Setting {
+        changeApiKey(setting, apiKeyId)
+        return save(setting)
     }
 
     @Transactional
-    fun updateSetting(id: Long, settingDto: SettingDto): Setting {
-        if (settingRepository.existsById(id)) {
-            val apis = apiKeyService.getApiKey(settingDto.apiKeyId)
-            return save(settingDto.toEntity(apis, id))
+    fun updateSetting(id: Long, setting: Setting, apiKeyId: Long): Setting {
+        return when (setting) {
+            is WebPageTestSetting -> updateSetting(id, setting, apiKeyId)
+            is PageSpeedSetting -> updateSetting(id, setting, apiKeyId)
+        }
+    }
+
+    private fun updateSetting(id: Long, setting: WebPageTestSetting, apiKeyId: Long): WebPageTestSetting {
+        val persistedSetting = getSetting(id)
+        if (persistedSetting is WebPageTestSetting) {
+            persistedSetting.also {
+                if (persistedSetting.apiKey().id != apiKeyId) {
+                    changeApiKey(it, apiKeyId)
+                }
+                it.pageUrl = setting.pageUrl
+                it.cronExpression = setting.cronExpression
+                it.zoneId = setting.zoneId
+            }
+            return save(persistedSetting)
         } else {
-            throw EntityNotFoundException<Setting>(id)
+            throw InvalidApiType()
+        }
+    }
+
+    private fun updateSetting(id: Long, setting: PageSpeedSetting, apiKeyId: Long): PageSpeedSetting {
+        return TODO()
+    }
+
+    fun changeApiKey(setting: Setting, apiKeyId: Long) {
+        val apiKey = apiKeyService.getApiKey(apiKeyId)
+        when (setting) {
+            is WebPageTestSetting -> setting.apiKey =
+                if (apiKey is WebPageTestApiKey) apiKey else throw InvalidApiType()
+            is PageSpeedSetting -> setting.apiKey = if (apiKey is PageSpeedApiKey) apiKey else throw InvalidApiType()
         }
     }
 
@@ -58,7 +89,7 @@ class SettingService(
         settingRepository.deleteAll()
     }
 
-    private fun save(setting: Setting): Setting {
+    private fun <T : Setting> save(setting: T): T {
         if (CronSequenceGenerator.isValidExpression(setting.cronExpression)) {
             val saved = settingRepository.save(setting)
             eventPublisher.publishEvent(RegisterEvent(this, saved))

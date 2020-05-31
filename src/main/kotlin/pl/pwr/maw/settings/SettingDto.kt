@@ -2,7 +2,6 @@ package pl.pwr.maw.settings
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import pl.pwr.maw.api.ApiKey
 import pl.pwr.maw.api.ApiKeyType
 import java.time.ZoneId
 
@@ -17,7 +16,7 @@ sealed class SettingDto(
     open val cronExpression: String,
     open val zoneId: ZoneId
 ) {
-    abstract fun toEntity(apiKey: ApiKey, id: Long? = null): Setting
+    abstract fun toEntity(): Setting
 }
 
 data class WebPageTestSettingDto(
@@ -26,15 +25,15 @@ data class WebPageTestSettingDto(
     override val cronExpression: String,
     override val zoneId: ZoneId
 ) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
-    override fun toEntity(apiKey: ApiKey, id: Long?): Setting =
-        WebPageTestSetting(id, pageUrl, apiKey, cronExpression, zoneId)
+    override fun toEntity(): Setting = WebPageTestSetting(pageUrl, cronExpression, zoneId)
 }
 
 data class PageSpeedSettingDto(
     override val pageUrl: String,
     override val apiKeyId: Long,
     override val cronExpression: String,
-    override val zoneId: ZoneId
+    override val zoneId: ZoneId,
+    val strategy: Strategy?
 ) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
-    override fun toEntity(apiKey: ApiKey, id: Long?) = PageSpeedSetting(id, pageUrl, apiKey, cronExpression, zoneId)
+    override fun toEntity() = PageSpeedSetting(pageUrl, cronExpression, zoneId, strategy)
 }

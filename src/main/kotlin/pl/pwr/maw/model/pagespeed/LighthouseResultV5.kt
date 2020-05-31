@@ -11,7 +11,7 @@ data class LighthouseResultV5(
     val i18n: I18n,
     val lighthouseVersion: String,
     val requestedUrl: String,
-    val runtimeError: RuntimeError,
+    val runtimeError: RuntimeError?,
     val runWarnings: List<Any>,
     val stackPacks: List<StackPack>,
     val timing: Timing,

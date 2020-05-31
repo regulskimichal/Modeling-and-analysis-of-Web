@@ -7,7 +7,7 @@ data class LighthouseAuditResultV5(
     val errorMessage: String,
     val explanation: String,
     val id: String,
-    val numericValue: Double?,
+    val numericValue: Long?,
     val score: Any,
     val scoreDisplayMode: String,
     val title: String,

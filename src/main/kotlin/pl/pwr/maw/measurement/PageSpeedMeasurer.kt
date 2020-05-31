@@ -1,60 +1,67 @@
 package pl.pwr.maw.measurement
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.client.RestTemplate
-import pl.pwr.maw.api.ApiKeyService
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.bodyToMono
+import org.springframework.web.util.UriComponentsBuilder
+import pl.pwr.maw.measurement.ResultType.*
+import pl.pwr.maw.model.pagespeed.PagespeedApiPagespeedResponseV5
+import pl.pwr.maw.settings.PageSpeedSetting
+import java.time.Instant
 
 @Service
 @Transactional(readOnly = true)
 class PageSpeedMeasurer(
     @Value("\${api.pageSpeedInsightsUrl}") private val pageSpeedInsightsUrl: String,
-    private val restTemplate: RestTemplate,
-    private val measurementRepository: MeasurementRepository,
-    private val apiKeyService: ApiKeyService
-) : PerformanceMeasurer {
+    private val webClient: WebClient,
+    private val objectMapper: ObjectMapper
+) : PerformanceMeasurer<PageSpeedSetting> {
 
-    override fun preformMeasurement(url: String, runs: Int, firstViewOnly: Boolean): MeasurementResult? =
-        TODO("Not yet implemented")
+    override fun preformMeasurement(setting: PageSpeedSetting): PageSpeedMeasurement {
+        val url = UriComponentsBuilder.fromHttpUrl(pageSpeedInsightsUrl)
+            .queryParam("key", setting.apiKey)
+            .queryParam("url", setting.pageUrl)
+            .apply {
+                if (setting.strategy != null) {
+                    queryParam("strategy", setting.strategy)
+                }
+            }.build().toUri()
 
-    /*fun getResults(url: String): Measurement? {
-        val uri = UriComponentsBuilder.fromHttpUrl(pageSpeedInsightsUrl)
-            .queryParam("key", apiSettingsService.getApiKey(Api.PAGE_SPEED))
-            .queryParam("url", url)
-            .build().toUri()
-
-        return webClient.get().uri(uri).exchange()
+        return webClient.get().uri(url).exchange()
             .flatMap { it.bodyToMono<PagespeedApiPagespeedResponseV5>() }
-            .flatMap { measurementRepository.save(it.asMeasurement()) }
-            .awaitSingle()
+            .map { it.asMeasurement(setting) }
+            .block()!!
     }
 
-    private fun PagespeedApiPagespeedResponseV5.asMeasurement(): Measurement {
-        val error = this.lighthouseResult?.runtimeError
+    private fun PagespeedApiPagespeedResponseV5.asMeasurement(setting: PageSpeedSetting): PageSpeedMeasurement {
+        return when (lighthouseResult.runtimeError) {
+            null -> PageSpeedMeasurement(
+                null,
+                setting,
+                objectMapper.writeValueAsString(this),
+                SUCCESS,
+                setting.strategy,
+                lighthouseResult.userAgent,
+                Instant.parse(lighthouseResult.fetchTime),
+                lighthouseResult.audits["largest-contentful-paint"]?.numericValue,
+                lighthouseResult.audits["first-meaningful-paint"]?.numericValue
+            )
 
-        val resultType: ResultType = if (error == null) {
-            ResultType.SUCCESS
-        } else {
-            if (error.code == "FAILED_DOCUMENT_REQUEST") {
-                ResultType.FAILURE
-            } else {
-                ResultType.WITH_ERRORS
-            }
+            else -> PageSpeedMeasurement(
+                null,
+                setting,
+                objectMapper.writeValueAsString(this),
+                API_ERROR,
+                null,
+                null,
+                Instant.now(),
+                null,
+                null
+            )
         }
-
-        val loadingTime = this.loadingExperience?.metrics?.get("FIRST_INPUT_DELAY_MS")?.distributions?.sumByDouble {
-            it.proportion ?: 0.0
-        }
-
-        return Measurement(
-            lighthouseResult?.requestedUrl,
-            resultType,
-            lighthouseResult?.userAgent,
-            Strategy.DESKTOP,
-            analysisUTCTimestamp?.toInstant(),
-            loadingTime
-        )
-    }*/
+    }
 
 }
