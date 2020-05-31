@@ -1,7 +1,5 @@
-package pl.pwr.maw.measurement
+package pl.pwr.maw.model
 
-import pl.pwr.maw.settings.Setting
-import pl.pwr.maw.settings.Strategy
 import java.time.Instant
 import javax.persistence.*
 
@@ -52,7 +50,13 @@ data class WebPageTestMeasurement(
 
     override var analysisTime: Instant
 ) : Measurement(id, setting, resultJson, resultType, strategy, userAgent, analysisTime) {
-    override fun toDto() = WebPageTestMeasurementDto(setting.pageUrl, resultType, strategy, userAgent, analysisTime)
+    override fun toDto() = WebPageTestMeasurementDto(
+        setting.pageUrl,
+        resultType,
+        strategy,
+        userAgent,
+        analysisTime
+    )
 }
 
 @Entity

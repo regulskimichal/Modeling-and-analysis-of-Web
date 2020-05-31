@@ -1,6 +1,5 @@
-package pl.pwr.maw.measurement
+package pl.pwr.maw.model
 
-import pl.pwr.maw.settings.Strategy
 import java.time.Instant
 
 sealed class MeasurementDto(

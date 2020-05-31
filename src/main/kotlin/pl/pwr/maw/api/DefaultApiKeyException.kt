@@ -1,6 +1,7 @@
 package pl.pwr.maw.api
 
 import pl.pwr.maw.commons.DomainException
+import pl.pwr.maw.model.ApiKey
 
 class DefaultApiKeyException(
     id: Any,

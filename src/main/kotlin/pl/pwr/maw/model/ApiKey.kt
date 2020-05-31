@@ -1,6 +1,6 @@
-package pl.pwr.maw.api
+package pl.pwr.maw.model
 
-import pl.pwr.maw.api.ApiKeyType.*
+import pl.pwr.maw.model.ApiType.*
 import javax.persistence.*
 
 @Entity
@@ -20,7 +20,7 @@ sealed class ApiKey(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", insertable = false, updatable = false, nullable = false)
-    open var type: ApiKeyType
+    open var type: ApiType
 )
 
 @Entity
@@ -34,7 +34,7 @@ data class WebPageTestApiKey(
 
     override var defaultKey: Boolean = false,
 
-    override var type: ApiKeyType = WEB_PAGE_TEST
+    override var type: ApiType = WEB_PAGE_TEST
 ) : ApiKey(id, name, apiKey, defaultKey, type)
 
 @Entity
@@ -48,5 +48,5 @@ data class PageSpeedApiKey(
 
     override var defaultKey: Boolean = false,
 
-    override var type: ApiKeyType = PAGE_SPEED
+    override var type: ApiType = PAGE_SPEED
 ) : ApiKey(id, name, apiKey, defaultKey, type)

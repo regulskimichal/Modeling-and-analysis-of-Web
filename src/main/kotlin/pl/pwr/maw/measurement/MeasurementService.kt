@@ -4,6 +4,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.pwr.maw.commons.EntityNotFoundException
+import pl.pwr.maw.model.Measurement
 
 @Service
 @Transactional(readOnly = true)

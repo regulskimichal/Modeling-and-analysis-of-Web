@@ -1,9 +1,10 @@
 package pl.pwr.maw.measurement
 
 import org.springframework.stereotype.Component
-import pl.pwr.maw.settings.PageSpeedSetting
-import pl.pwr.maw.settings.Setting
-import pl.pwr.maw.settings.WebPageTestSetting
+import pl.pwr.maw.model.Measurement
+import pl.pwr.maw.model.PageSpeedSetting
+import pl.pwr.maw.model.Setting
+import pl.pwr.maw.model.WebPageTestSetting
 
 @Component
 class DefaultPerformanceMeasurer(
@@ -17,8 +18,7 @@ class DefaultPerformanceMeasurer(
             is WebPageTestSetting -> webPageTestMeasurer.preformMeasurement(setting)
             is PageSpeedSetting -> pageSpeedMeasurer.preformMeasurement(setting)
         }
-        measurementRepository.save(measurement)
-        return measurement
+        return measurementRepository.save(measurement)
     }
 
 }

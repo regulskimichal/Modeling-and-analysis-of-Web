@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.pwr.maw.commons.EntityNotFoundException
 import pl.pwr.maw.commons.logger
+import pl.pwr.maw.model.ApiKey
+import pl.pwr.maw.model.ApiType
 
 @Service
 @Transactional(readOnly = true)
@@ -13,9 +15,9 @@ class ApiKeyService(
 ) {
 
     fun getAllApiKeys(apiTypeName: String? = null): List<ApiKey> = when (apiTypeName) {
-        null -> apiKeyRepository.findAllByTypeInOrderByIdAsc(ApiKeyType.values)
+        null -> apiKeyRepository.findAllByTypeInOrderByIdAsc(ApiType.values)
         else -> {
-            val apiKeyType = ApiKeyType.values.firstOrNull { it.name.toLowerCase() == apiTypeName.toLowerCase() }
+            val apiKeyType = ApiType.values.firstOrNull { it.name.toLowerCase() == apiTypeName.toLowerCase() }
             if (apiKeyType != null) {
                 apiKeyRepository.findAllByTypeOrderByIdAsc(apiKeyType)
             } else {
@@ -53,8 +55,8 @@ class ApiKeyService(
         log.debug("Updatelod API key: $persistedApiKey")
     }
 
-    private fun changeDefaultKey(apiKeyType: ApiKeyType) {
-        val currentDefaultApiKey = apiKeyRepository.findByTypeAndDefaultKeyIsTrue(apiKeyType)
+    private fun changeDefaultKey(apiType: ApiType) {
+        val currentDefaultApiKey = apiKeyRepository.findByTypeAndDefaultKeyIsTrue(apiType)
         if (currentDefaultApiKey != null) {
             currentDefaultApiKey.defaultKey = false
             apiKeyRepository.save(currentDefaultApiKey)

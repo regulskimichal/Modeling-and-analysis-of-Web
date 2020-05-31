@@ -5,6 +5,7 @@ import org.springframework.scheduling.support.CronTrigger
 import org.springframework.stereotype.Service
 import pl.pwr.maw.commons.logger
 import pl.pwr.maw.measurement.DefaultPerformanceMeasurer
+import pl.pwr.maw.model.Setting
 import java.util.TimeZone
 import java.util.concurrent.ScheduledFuture
 

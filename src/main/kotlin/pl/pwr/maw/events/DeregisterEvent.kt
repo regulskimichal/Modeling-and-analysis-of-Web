@@ -1,4 +1,4 @@
-package pl.pwr.maw.commons.events
+package pl.pwr.maw.events
 
 import org.springframework.context.ApplicationEvent
 

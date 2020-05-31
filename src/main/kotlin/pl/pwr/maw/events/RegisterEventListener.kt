@@ -1,8 +1,8 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.events
 
 import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
-import pl.pwr.maw.commons.events.DeregisterEvent
+import pl.pwr.maw.settings.ScheduleService
 
 @Component
 class RegisterEventListener(

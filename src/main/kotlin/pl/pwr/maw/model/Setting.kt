@@ -1,11 +1,5 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.model
 
-import pl.pwr.maw.api.ApiKey
-import pl.pwr.maw.api.PageSpeedApiKey
-import pl.pwr.maw.api.WebPageTestApiKey
-import pl.pwr.maw.measurement.Measurement
-import pl.pwr.maw.measurement.PageSpeedMeasurement
-import pl.pwr.maw.measurement.WebPageTestMeasurement
 import java.time.ZoneId
 import javax.persistence.*
 
@@ -46,7 +40,13 @@ data class WebPageTestSetting(
 
     override fun measurements(): Set<Measurement> = measurements
 
-    override fun toDto() = WebPageTestSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
+    override fun toDto() = WebPageTestSettingResponseDto(
+        id,
+        pageUrl,
+        apiKey.id,
+        cronExpression,
+        zoneId
+    )
 }
 
 @Entity
@@ -70,5 +70,6 @@ data class PageSpeedSetting(
 
     override fun measurements(): Set<Measurement> = measurements
 
-    override fun toDto() = PageSpeedSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
+    override fun toDto() =
+        PageSpeedSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
 }

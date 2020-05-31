@@ -2,6 +2,7 @@ package pl.pwr.maw.api
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import pl.pwr.maw.model.ApiKey
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 

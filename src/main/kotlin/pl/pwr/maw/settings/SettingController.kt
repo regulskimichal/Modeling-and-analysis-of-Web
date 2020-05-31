@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.*
+import pl.pwr.maw.model.SettingDto
+import pl.pwr.maw.model.SettingResponseDto
 
 @RestController
 @RequestMapping("/setting")
@@ -28,15 +30,6 @@ class SettingController(
     @ResponseStatus(HttpStatus.CREATED)
     fun saveSettings(@RequestBody settingDto: SettingDto): SettingResponseDto {
         return settingService.saveSetting(settingDto.toEntity(), settingDto.apiKeyId).toDto()
-    }
-
-    @PutMapping("/{id}", consumes = [APPLICATION_JSON_VALUE])
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun updateSettings(
-        @PathVariable id: Long,
-        @RequestBody settingDto: SettingDto
-    ): SettingResponseDto {
-        return settingService.updateSetting(id, settingDto.toEntity(), settingDto.apiKeyId).toDto()
     }
 
     @DeleteMapping("/{id}")

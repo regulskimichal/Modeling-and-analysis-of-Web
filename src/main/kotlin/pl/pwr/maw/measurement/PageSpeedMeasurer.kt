@@ -7,9 +7,10 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import org.springframework.web.util.UriComponentsBuilder
-import pl.pwr.maw.measurement.ResultType.*
+import pl.pwr.maw.model.PageSpeedMeasurement
+import pl.pwr.maw.model.PageSpeedSetting
+import pl.pwr.maw.model.ResultType.*
 import pl.pwr.maw.model.pagespeed.PagespeedApiPagespeedResponseV5
-import pl.pwr.maw.settings.PageSpeedSetting
 import java.time.Instant
 
 @Service

@@ -3,6 +3,8 @@ package pl.pwr.maw.api
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import pl.pwr.maw.model.ApiKey
+import pl.pwr.maw.model.ApiKeyDto
 
 @RestController
 @RequestMapping("/api-key")
