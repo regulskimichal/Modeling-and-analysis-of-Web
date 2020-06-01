@@ -15,14 +15,13 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        generate_statistics: true
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
 
 logging:
   level:
-    pl.pwr.maw: debug
+    pl.pwr.maw: warn
 
 api:
   webPageTestUrl: http://www.webpagetest.org/runtest.php

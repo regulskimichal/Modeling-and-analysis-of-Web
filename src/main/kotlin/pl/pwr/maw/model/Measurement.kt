@@ -32,7 +32,7 @@ sealed class Measurement(
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     @JoinColumn(name = "response_id")
-    lateinit var originalResponse: Response
+    open lateinit var originalResponse: Response
 
     abstract fun setting(): Setting
 
