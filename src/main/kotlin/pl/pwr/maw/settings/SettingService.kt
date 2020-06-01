@@ -38,6 +38,22 @@ class SettingService(
     }
 
     @Transactional
+    fun setEnabled(id: Long, value: Boolean) {
+        val setting = getSetting(id)
+        if (setting.enabled xor value) {
+            setting.apply {
+                enabled = value
+            }
+            settingRepository.save(setting)
+            if (value) {
+                eventPublisher.publishEvent(RegisterEvent(this, setting))
+            } else {
+                eventPublisher.publishEvent(DeregisterEvent(this, id))
+            }
+        }
+    }
+
+    @Transactional
     fun deleteSetting(id: Long) {
         if (settingRepository.existsById(id)) {
             settingRepository.deleteById(id)
@@ -71,7 +87,7 @@ class SettingService(
             eventPublisher.publishEvent(RegisterEvent(this, saved))
             return saved
         } else {
-            throw IllegalArgumentException("Invalid value of cronExpression")
+            throw InvalidCronExpressionException()
         }
     }
 

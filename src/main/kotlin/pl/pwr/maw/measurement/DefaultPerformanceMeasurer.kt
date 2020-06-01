@@ -22,8 +22,10 @@ class DefaultPerformanceMeasurer(
                 is WebPageTestSetting -> webPageTestMeasurer.preformMeasurement(setting)
                 is PageSpeedSetting -> pageSpeedMeasurer.preformMeasurement(setting)
             }
-            val saved = measurementRepository.save(measurement)
-            log.debug(saved.toString())
+            if (measurement != null) {
+                val saved = measurementRepository.save(measurement)
+                log.debug(saved.toString())
+            }
         }
     }
 

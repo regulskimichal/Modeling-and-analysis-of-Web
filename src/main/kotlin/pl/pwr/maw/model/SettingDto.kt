@@ -24,10 +24,22 @@ data class WebPageTestSettingDto(
     override val pageUrl: String,
     override val apiKeyId: Long,
     override val cronExpression: String,
-    override val zoneId: ZoneId
+    override val zoneId: ZoneId,
+    val location: String?,
+    val browser: Browser?,
+    val connectivityProfile: ConnectivityProfile?
 ) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
 
-    override fun toEntity(): Setting = WebPageTestSetting(null, pageUrl, cronExpression, zoneId)
+    override fun toEntity(): Setting = WebPageTestSetting(
+        null,
+        pageUrl,
+        cronExpression,
+        zoneId,
+        true,
+        location,
+        browser,
+        connectivityProfile
+    )
 
 }
 
@@ -39,6 +51,6 @@ data class PageSpeedSettingDto(
     val strategy: Strategy?
 ) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
 
-    override fun toEntity() = PageSpeedSetting(null, pageUrl, cronExpression, zoneId, strategy)
+    override fun toEntity() = PageSpeedSetting(null, pageUrl, cronExpression, zoneId, true, strategy)
 
 }

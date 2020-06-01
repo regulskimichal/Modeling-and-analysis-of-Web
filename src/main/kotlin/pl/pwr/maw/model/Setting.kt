@@ -16,11 +16,15 @@ sealed class Setting(
 
     open var cronExpression: String,
 
-    open var zoneId: ZoneId
+    open var zoneId: ZoneId,
+
+    @Column(nullable = false)
+    open var enabled: Boolean
 
 ) {
 
-    abstract fun getApiKey(): ApiKey
+    @ManyToOne
+    open var apiKey: ApiKey? = null
 
     abstract fun measurements(): Set<Measurement>
 
@@ -34,23 +38,26 @@ data class WebPageTestSetting(
     override var id: Long? = null,
     override var pageUrl: String,
     override var cronExpression: String,
-    override var zoneId: ZoneId
-) : Setting(id, pageUrl, cronExpression, zoneId) {
+    override var zoneId: ZoneId,
+    override var enabled: Boolean,
+
+    var location: String?,
+    var browser: Browser?,
+    var connectivityProfile: ConnectivityProfile?
+) : Setting(id, pageUrl, cronExpression, zoneId, enabled) {
 
     @ManyToOne
-    lateinit var apiKey: WebPageTestApiKey
+    override var apiKey: ApiKey? = null
 
     @OneToMany(mappedBy = "setting")
     lateinit var measurements: Set<WebPageTestMeasurement>
-
-    override fun getApiKey(): ApiKey = apiKey
 
     override fun measurements(): Set<Measurement> = measurements
 
     override fun toDto() = WebPageTestSettingResponseDto(
         id,
         pageUrl,
-        apiKey.id,
+        apiKey?.id,
         cronExpression,
         zoneId
     )
@@ -64,19 +71,18 @@ data class PageSpeedSetting(
     override var pageUrl: String,
     override var cronExpression: String,
     override var zoneId: ZoneId,
+    override var enabled: Boolean,
     @Enumerated(EnumType.STRING) var strategy: Strategy?
-) : Setting(id, pageUrl, cronExpression, zoneId) {
+) : Setting(id, pageUrl, cronExpression, zoneId, enabled) {
 
     @ManyToOne
-    lateinit var apiKey: PageSpeedApiKey
+    override var apiKey: ApiKey? = null
 
     @OneToMany(mappedBy = "setting")
     lateinit var measurements: Set<PageSpeedMeasurement>
 
-    override fun getApiKey(): ApiKey = apiKey
-
     override fun measurements(): Set<Measurement> = measurements
 
-    override fun toDto() = PageSpeedSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
+    override fun toDto() = PageSpeedSettingResponseDto(id, pageUrl, apiKey?.id, cronExpression, zoneId)
 
 }

@@ -39,6 +39,18 @@ class SettingController(
         return settingService.saveSetting(settingDto.toEntity(), settingDto.apiKeyId).toDto()
     }
 
+    @GetMapping("/{id}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun enableSetting(@PathVariable id: Long) {
+        settingService.setEnabled(id, true)
+    }
+
+    @GetMapping("/{id}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun disableSetting(@PathVariable id: Long) {
+        settingService.setEnabled(id, false)
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteSettings(@PathVariable id: Long) {

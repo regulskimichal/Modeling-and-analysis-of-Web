@@ -13,7 +13,11 @@ class ContextRefreshedEventListener(
 ) : ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        settingService.getAllSettings().forEach { scheduleService.register(it) }
+        settingService.getAllSettings().forEach {
+            if (it.enabled) {
+                scheduleService.register(it)
+            }
+        }
     }
 
 }

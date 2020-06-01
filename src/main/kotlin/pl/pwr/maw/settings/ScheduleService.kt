@@ -1,6 +1,6 @@
 package pl.pwr.maw.settings
 
-import org.springframework.scheduling.TaskScheduler
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.scheduling.support.CronTrigger
 import org.springframework.stereotype.Service
 import pl.pwr.maw.commons.logger
@@ -11,7 +11,8 @@ import java.util.concurrent.ScheduledFuture
 
 @Service
 class ScheduleService(
-    private val taskScheduler: TaskScheduler,
+
+    private val taskScheduler: ThreadPoolTaskScheduler,
     private val performanceMeasurer: DefaultPerformanceMeasurer
 ) {
 
