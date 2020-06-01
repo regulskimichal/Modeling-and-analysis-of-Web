@@ -41,7 +41,6 @@ class PageSpeedMeasurer(
         return when (lighthouseResult.runtimeError) {
             null -> PageSpeedMeasurement(
                 null,
-                setting,
                 objectMapper.writeValueAsString(this),
                 SUCCESS,
                 setting.strategy,
@@ -49,11 +48,10 @@ class PageSpeedMeasurer(
                 Instant.parse(lighthouseResult.fetchTime),
                 lighthouseResult.audits["largest-contentful-paint"]?.numericValue,
                 lighthouseResult.audits["first-meaningful-paint"]?.numericValue
-            )
+            ).apply { this.setting = setting }
 
             else -> PageSpeedMeasurement(
                 null,
-                setting,
                 objectMapper.writeValueAsString(this),
                 API_ERROR,
                 null,
@@ -61,7 +59,7 @@ class PageSpeedMeasurer(
                 Instant.now(),
                 null,
                 null
-            )
+            ).apply { this.setting = setting }
         }
     }
 

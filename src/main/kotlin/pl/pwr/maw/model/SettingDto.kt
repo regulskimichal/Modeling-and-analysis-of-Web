@@ -15,7 +15,9 @@ sealed class SettingDto(
     open val cronExpression: String,
     open val zoneId: ZoneId
 ) {
+
     abstract fun toEntity(): Setting
+
 }
 
 data class WebPageTestSettingDto(
@@ -24,8 +26,9 @@ data class WebPageTestSettingDto(
     override val cronExpression: String,
     override val zoneId: ZoneId
 ) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
-    override fun toEntity(): Setting =
-        WebPageTestSetting(pageUrl, cronExpression, zoneId)
+
+    override fun toEntity(): Setting = WebPageTestSetting(null, pageUrl, cronExpression, zoneId)
+
 }
 
 data class PageSpeedSettingDto(
@@ -35,6 +38,7 @@ data class PageSpeedSettingDto(
     override val zoneId: ZoneId,
     val strategy: Strategy?
 ) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
-    override fun toEntity() =
-        PageSpeedSetting(pageUrl, cronExpression, zoneId, strategy)
+
+    override fun toEntity() = PageSpeedSetting(null, pageUrl, cronExpression, zoneId, strategy)
+
 }

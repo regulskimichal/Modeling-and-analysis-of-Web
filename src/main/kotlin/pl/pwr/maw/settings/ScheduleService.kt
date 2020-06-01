@@ -22,7 +22,7 @@ class ScheduleService(
 
         if (settingsId != null) {
             val task = Runnable {
-                log.debug("Running task")
+                log.debug("Performance measure for $setting")
                 performanceMeasurer.preformMeasurement(setting)
             }
 

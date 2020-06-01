@@ -1,8 +1,10 @@
 package pl.pwr.maw.measurement
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.bodyToMono
 import org.springframework.web.util.UriComponentsBuilder
 import pl.pwr.maw.model.WebPageTestMeasurement
 import pl.pwr.maw.model.WebPageTestSetting
@@ -12,7 +14,8 @@ import pl.pwr.maw.model.webpagetest.WebPageTestResponse
 @Service
 class WebPageTestMeasurer(
     @Value("\${api.webPageTestUrl}") private val webPageTestUrl: String,
-    private val restTemplate: RestTemplate
+    private val webClient: WebClient,
+    private val objectMapper: ObjectMapper
 ) : PerformanceMeasurer<WebPageTestSetting> {
 
     override fun preformMeasurement(setting: WebPageTestSetting): WebPageTestMeasurement {
@@ -24,16 +27,14 @@ class WebPageTestMeasurer(
             //.queryParam("fvonly", TODO())
             .build().toUri()
 
-        return restTemplate.getForObject(uri, WebPageTestInitResponse::class.java)?.let { webPageTestInitResponse ->
-            restTemplate.getForObject(
-                webPageTestInitResponse.data.jsonUrl,
-                WebPageTestResponse::class.java
-            )?.let { webPageTestResponse ->
-                asMeasurement(webPageTestResponse)
-            }
-        }!!
+        return webClient.get().uri(uri).exchange()
+            .flatMap { it.bodyToMono<WebPageTestInitResponse>() }
+            .flatMap { webClient.get().uri(it.data.jsonUrl).exchange() }
+            .flatMap { it.bodyToMono<WebPageTestResponse>() }
+            .map { it.asMeasurement() }
+            .block()!!
     }
 
-    private fun asMeasurement(response: WebPageTestResponse): WebPageTestMeasurement = TODO()
+    private fun WebPageTestResponse.asMeasurement(): WebPageTestMeasurement = TODO()
 
 }

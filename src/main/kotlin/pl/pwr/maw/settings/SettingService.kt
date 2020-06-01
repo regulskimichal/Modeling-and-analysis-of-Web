@@ -5,11 +5,14 @@ import org.springframework.scheduling.support.CronSequenceGenerator
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.pwr.maw.api.ApiKeyService
-import pl.pwr.maw.api.InvalidApiType
+import pl.pwr.maw.api.InvalidApiTypeException
 import pl.pwr.maw.commons.EntityNotFoundException
 import pl.pwr.maw.events.DeregisterEvent
 import pl.pwr.maw.events.RegisterEvent
-import pl.pwr.maw.model.*
+import pl.pwr.maw.model.ApiKey
+import pl.pwr.maw.model.PageSpeedSetting
+import pl.pwr.maw.model.Setting
+import pl.pwr.maw.model.WebPageTestSetting
 
 @Service
 @Transactional(readOnly = true)
@@ -52,10 +55,14 @@ class SettingService(
     private fun <T : Setting> changeApiKey(setting: T, apiKeyId: Long) {
         val apiKey = apiKeyService.getApiKey(apiKeyId)
         when (setting) {
-            is WebPageTestSetting -> setting.apiKey =
-                if (apiKey is WebPageTestApiKey) apiKey else throw InvalidApiType()
-            is PageSpeedSetting -> setting.apiKey = if (apiKey is PageSpeedApiKey) apiKey else throw InvalidApiType()
+            is WebPageTestSetting -> setting.apiKey = castApiKey(apiKey)
+            is PageSpeedSetting -> setting.apiKey = castApiKey(apiKey)
         }
+    }
+
+    private inline fun <reified T : ApiKey> castApiKey(apiKey: ApiKey): T = when (apiKey) {
+        is T -> apiKey
+        else -> throw InvalidApiTypeException()
     }
 
     private fun <T : Setting> save(setting: T): T {

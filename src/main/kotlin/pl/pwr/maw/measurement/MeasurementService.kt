@@ -1,6 +1,5 @@
 package pl.pwr.maw.measurement
 
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.pwr.maw.commons.EntityNotFoundException
@@ -13,7 +12,7 @@ class MeasurementService(
 ) {
 
     fun getMeasurement(id: Long): Measurement {
-        return measurementRepository.findByIdOrNull(id) ?: throw EntityNotFoundException<Measurement>(id)
+        return measurementRepository.findById(id).orElseThrow { EntityNotFoundException<Measurement>(id) }
     }
 
 }

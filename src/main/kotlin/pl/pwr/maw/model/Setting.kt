@@ -6,37 +6,44 @@ import javax.persistence.*
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 sealed class Setting(
-    open var pageUrl: String,
-    open var cronExpression: String,
-    open var zoneId: ZoneId
-) {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    open var id: Long? = null
+    @Column(updatable = false, nullable = false)
+    open var id: Long? = null,
 
-    abstract fun apiKey(): ApiKey
+    open var pageUrl: String,
+
+    open var cronExpression: String,
+
+    open var zoneId: ZoneId
+
+) {
+
+    abstract fun getApiKey(): ApiKey
 
     abstract fun measurements(): Set<Measurement>
 
     abstract fun toDto(): SettingResponseDto
+
 }
 
 @Entity
 @Table(name = "web_page_test_settings")
 data class WebPageTestSetting(
+    override var id: Long? = null,
     override var pageUrl: String,
     override var cronExpression: String,
     override var zoneId: ZoneId
-) : Setting(pageUrl, cronExpression, zoneId) {
-    override var id: Long? = null
+) : Setting(id, pageUrl, cronExpression, zoneId) {
 
     @ManyToOne
     lateinit var apiKey: WebPageTestApiKey
 
-    @OneToMany
+    @OneToMany(mappedBy = "setting")
     lateinit var measurements: Set<WebPageTestMeasurement>
 
-    override fun apiKey(): ApiKey = apiKey
+    override fun getApiKey(): ApiKey = apiKey
 
     override fun measurements(): Set<Measurement> = measurements
 
@@ -47,29 +54,29 @@ data class WebPageTestSetting(
         cronExpression,
         zoneId
     )
+
 }
 
 @Entity
 @Table(name = "page_speed_settings")
 data class PageSpeedSetting(
+    override var id: Long? = null,
     override var pageUrl: String,
     override var cronExpression: String,
     override var zoneId: ZoneId,
-    @Enumerated(EnumType.STRING)
-    var strategy: Strategy?
-) : Setting(pageUrl, cronExpression, zoneId) {
-    override var id: Long? = null
+    @Enumerated(EnumType.STRING) var strategy: Strategy?
+) : Setting(id, pageUrl, cronExpression, zoneId) {
 
     @ManyToOne
     lateinit var apiKey: PageSpeedApiKey
 
-    @OneToMany
+    @OneToMany(mappedBy = "setting")
     lateinit var measurements: Set<PageSpeedMeasurement>
 
-    override fun apiKey(): ApiKey = apiKey
+    override fun getApiKey(): ApiKey = apiKey
 
     override fun measurements(): Set<Measurement> = measurements
 
-    override fun toDto() =
-        PageSpeedSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
+    override fun toDto() = PageSpeedSettingResponseDto(id, pageUrl, apiKey.id, cronExpression, zoneId)
+
 }

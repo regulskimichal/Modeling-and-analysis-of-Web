@@ -13,7 +13,9 @@ sealed class ApiKeyDto(
     open val apiKey: String,
     open val defaultKey: Boolean = false
 ) {
+
     abstract fun toEntity(id: Long? = null): ApiKey
+
 }
 
 data class WebPageTestApiKeyDto(
@@ -21,8 +23,9 @@ data class WebPageTestApiKeyDto(
     override val apiKey: String,
     override val defaultKey: Boolean = false
 ) : ApiKeyDto(name, apiKey, defaultKey) {
-    override fun toEntity(id: Long?): WebPageTestApiKey =
-        WebPageTestApiKey(id, name, apiKey, defaultKey)
+
+    override fun toEntity(id: Long?): WebPageTestApiKey = WebPageTestApiKey(id, name, apiKey, defaultKey)
+
 }
 
 data class PageSpeedApiKeyDto(
@@ -30,6 +33,7 @@ data class PageSpeedApiKeyDto(
     override val apiKey: String,
     override val defaultKey: Boolean = false
 ) : ApiKeyDto(name, apiKey, defaultKey) {
-    override fun toEntity(id: Long?): ApiKey =
-        PageSpeedApiKey(id, name, apiKey, defaultKey)
+
+    override fun toEntity(id: Long?): ApiKey = PageSpeedApiKey(id, name, apiKey, defaultKey)
+
 }
