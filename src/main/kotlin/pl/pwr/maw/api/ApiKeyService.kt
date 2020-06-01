@@ -41,7 +41,14 @@ class ApiKeyService(
     }
 
     @Transactional
-    fun updateApiKey(@ValidApiKey apiKey: ApiKey) {
+    fun updateApiKey(apiKey: ApiKey) {
+        val oldApiKey = apiKeyRepository.findByIdOrNull(apiKey.id)
+        when {
+            oldApiKey == null -> throw EntityNotFoundException<ApiKey>(apiKey.id)
+            oldApiKey.type != apiKey.type -> throw InvalidApiTypeException()
+            oldApiKey.defaultKey && !apiKey.defaultKey -> throw DefaultKeyException.onUpdate()
+        }
+
         val persistedApiKey = getApiKey(apiKey.id!!)
         if (persistedApiKey.defaultKey != apiKey.defaultKey && apiKey.defaultKey) {
             changeDefaultKey(persistedApiKey.type)
@@ -52,7 +59,7 @@ class ApiKeyService(
             it.defaultKey = apiKey.defaultKey
         }
         apiKeyRepository.save(persistedApiKey)
-        log.debug("Updatelod API key: $persistedApiKey")
+        log.debug("Updated API key: $persistedApiKey")
     }
 
     private fun changeDefaultKey(apiType: ApiType) {
@@ -70,7 +77,7 @@ class ApiKeyService(
             if (!apiKey.defaultKey) {
                 apiKeyRepository.deleteById(id)
             } else {
-                throw DefaultApiKeyException(id)
+                throw DefaultKeyException.onRemove(id)
             }
         } else {
             throw EntityNotFoundException<ApiKey>(id)
