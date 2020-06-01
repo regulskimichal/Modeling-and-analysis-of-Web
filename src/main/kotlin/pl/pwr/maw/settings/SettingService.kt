@@ -9,10 +9,7 @@ import pl.pwr.maw.api.InvalidApiTypeException
 import pl.pwr.maw.commons.EntityNotFoundException
 import pl.pwr.maw.events.DeregisterEvent
 import pl.pwr.maw.events.RegisterEvent
-import pl.pwr.maw.model.ApiKey
-import pl.pwr.maw.model.PageSpeedSetting
-import pl.pwr.maw.model.Setting
-import pl.pwr.maw.model.WebPageTestSetting
+import pl.pwr.maw.model.*
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +22,15 @@ class SettingService(
     fun getSetting(id: Long): Setting {
         return settingRepository.findById(id)
             .orElseThrow { throw EntityNotFoundException<Setting>(id) }
+    }
+
+    fun getMeasurements(settingId: Long): List<MeasurementDto> {
+        return getSetting(settingId)
+            .measurements()
+            .asSequence()
+            .map { it.toDto() }
+            .sortedBy { it.id }
+            .toList()
     }
 
     fun getAllSettings(): List<Setting> {

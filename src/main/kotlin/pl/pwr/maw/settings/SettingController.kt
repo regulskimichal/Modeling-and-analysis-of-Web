@@ -24,7 +24,7 @@ class SettingController(
     @GetMapping("/{id}/measurements")
     @ResponseStatus(HttpStatus.OK)
     fun getMeasurementsForSetting(@PathVariable id: Long): List<MeasurementDto> {
-        return settingService.getSetting(id).measurements().map { it.toDto() }
+        return settingService.getMeasurements(id)
     }
 
     @GetMapping

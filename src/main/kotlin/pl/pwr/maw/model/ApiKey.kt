@@ -10,8 +10,9 @@ import javax.persistence.*
 sealed class ApiKey(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "api_keys_seq_gen")
+    @SequenceGenerator(name = "api_keys_seq_gen", sequenceName = "api_keys_id_seq")
+    @Column(unique = true, updatable = false, nullable = false)
     open var id: Long?,
 
     @Column(unique = true, nullable = false)

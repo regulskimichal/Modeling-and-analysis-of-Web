@@ -8,8 +8,9 @@ import javax.persistence.*
 sealed class Setting(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "settings_seq_gen")
+    @SequenceGenerator(name = "settings_seq_gen", sequenceName = "settings_id_seq")
+    @Column(unique = true, updatable = false, nullable = false)
     open var id: Long? = null,
 
     open var pageUrl: String,
@@ -40,7 +41,6 @@ data class WebPageTestSetting(
     override var cronExpression: String,
     override var zoneId: ZoneId,
     override var enabled: Boolean,
-
     var location: String?,
     var browser: Browser?,
     var connectivityProfile: ConnectivityProfile?

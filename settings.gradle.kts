@@ -19,7 +19,7 @@ pluginManagement {
                 "org.jetbrains.kotlin.jvm" -> useVersion(kotlinVersion)
                 "org.jetbrains.kotlin.plugin.spring" -> useVersion(kotlinVersion)
                 "org.jetbrains.kotlin.plugin.jpa" -> useVersion(kotlinVersion)
-                "org.flywaydb.flyway" -> useVersion(flywayVersion)
+                "org.hibernate.orm" -> useModule("org.hibernate:hibernate-gradle-plugin:5.4.15.Final")
             }
         }
     }

@@ -1,3 +1,4 @@
+import org.hibernate.orm.tooling.gradle.EnhanceExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -6,6 +7,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
+    id("org.hibernate.orm")
 }
 
 group = "pl.pwr"
@@ -20,6 +22,14 @@ configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
+}
+
+hibernate {
+    enhance(closureOf<EnhanceExtension> {
+        enableLazyInitialization = true
+        enableDirtyTracking = true
+        enableAssociationManagement = true
+    })
 }
 
 repositories {

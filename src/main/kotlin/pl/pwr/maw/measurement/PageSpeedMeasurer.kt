@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import pl.pwr.maw.commons.logger
 import pl.pwr.maw.model.PageSpeedMeasurement
 import pl.pwr.maw.model.PageSpeedSetting
+import pl.pwr.maw.model.Response
 import pl.pwr.maw.model.ResultType.*
 import pl.pwr.maw.model.pagespeed.PagespeedApiPagespeedResponseV5
 import java.net.URI
@@ -58,25 +59,29 @@ class PageSpeedMeasurer(
         if (lighthouseResult?.runtimeError != null) {
             PageSpeedMeasurement(
                 null,
-                originalJson,
                 SUCCESS,
                 setting.strategy,
                 lighthouseResult.userAgent,
                 Instant.parse(lighthouseResult.fetchTime),
                 lighthouseResult.audits["largest-contentful-paint"]?.numericValue,
                 lighthouseResult.audits["first-meaningful-paint"]?.numericValue
-            ).apply { this.setting = setting }
+            ).apply {
+                this.setting = setting
+                this.originalResponse = Response(null, originalJson)
+            }
         } else {
             PageSpeedMeasurement(
                 null,
-                originalJson,
                 API_ERROR,
                 null,
                 null,
                 Instant.now(),
                 null,
                 null
-            ).apply { this.setting = setting }
+            ).apply {
+                this.setting = setting
+                this.originalResponse = Response(null, originalJson)
+            }
         }
 
     companion object {
