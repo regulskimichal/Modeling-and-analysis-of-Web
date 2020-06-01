@@ -1,5 +1,6 @@
 package pl.pwr.maw.model
 
+import org.hibernate.annotations.Type
 import java.time.Instant
 import javax.persistence.*
 
@@ -13,6 +14,7 @@ sealed class Measurement(
     open var id: Long? = null,
 
     @Basic(fetch = FetchType.LAZY)
+    @Type(type = "text")
     open var resultJson: String?,
 
     @Enumerated(EnumType.STRING)
@@ -70,8 +72,8 @@ data class PageSpeedMeasurement(
     override var strategy: Strategy?,
     override var userAgent: String?,
     override var analysisTime: Instant,
-    var largestContentfulPaint: Long?,
-    var firstMeaningfulPaint: Long?
+    var largestContentfulPaint: Double?,
+    var firstMeaningfulPaint: Double?
 ) : Measurement(id, resultJson, resultType, strategy, userAgent, analysisTime) {
 
     @ManyToOne(optional = false)

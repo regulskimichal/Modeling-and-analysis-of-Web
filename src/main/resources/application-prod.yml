@@ -20,5 +20,5 @@ logging:
     pl.pwr.maw: warn
 
 api:
-  pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed
   webPageTestUrl: http://www.webpagetest.org/runtest.php
+  pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed

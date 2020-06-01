@@ -13,8 +13,8 @@ data class RendererFormattedStrings(
     val opportunityResourceColumnLabel: String,
     val opportunitySavingsColumnLabel: String,
     val passedAuditsGroupTitle: String,
-    val scorescaleLabel: String,
+    val scorescaleLabel: String?,
     val toplevelWarningsMessage: String,
-    val valianceDisclaimer: String,
+    val valianceDisclaimer: String?,
     val warningHeader: String
 )

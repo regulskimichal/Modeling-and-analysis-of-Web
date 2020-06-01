@@ -62,7 +62,7 @@ class SettingService(
 
     private inline fun <reified T : ApiKey> castApiKey(apiKey: ApiKey): T = when (apiKey) {
         is T -> apiKey
-        else -> throw InvalidApiTypeException()
+        else -> throw InvalidApiTypeException("ApiKey with id = ${apiKey.id} is incompatible with provided type")
     }
 
     private fun <T : Setting> save(setting: T): T {

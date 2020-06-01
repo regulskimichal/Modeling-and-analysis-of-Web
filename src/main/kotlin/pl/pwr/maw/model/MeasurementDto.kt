@@ -24,6 +24,6 @@ data class PageSpeedMeasurementDto(
     override val strategy: Strategy?,
     override val userAgent: String?,
     override val analysisTime: Instant,
-    val largestContentfulPaint: Long?,
-    val firstMeaningfulPaint: Long?
+    val largestContentfulPaint: Double?,
+    val firstMeaningfulPaint: Double?
 ) : MeasurementDto(url, resultType, strategy, userAgent, analysisTime)

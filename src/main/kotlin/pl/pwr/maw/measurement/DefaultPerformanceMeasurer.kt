@@ -1,7 +1,10 @@
 package pl.pwr.maw.measurement
 
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
-import pl.pwr.maw.model.Measurement
+import pl.pwr.maw.commons.logger
 import pl.pwr.maw.model.PageSpeedSetting
 import pl.pwr.maw.model.Setting
 import pl.pwr.maw.model.WebPageTestSetting
@@ -11,14 +14,21 @@ class DefaultPerformanceMeasurer(
     private val webPageTestMeasurer: WebPageTestMeasurer,
     private val pageSpeedMeasurer: PageSpeedMeasurer,
     private val measurementRepository: MeasurementRepository
-) : PerformanceMeasurer<Setting> {
+) {
 
-    override fun preformMeasurement(setting: Setting): Measurement {
-        val measurement = when (setting) {
-            is WebPageTestSetting -> webPageTestMeasurer.preformMeasurement(setting)
-            is PageSpeedSetting -> pageSpeedMeasurer.preformMeasurement(setting)
+    fun preformMeasurement(setting: Setting) {
+        GlobalScope.launch(IO) {
+            val measurement = when (setting) {
+                is WebPageTestSetting -> webPageTestMeasurer.preformMeasurement(setting)
+                is PageSpeedSetting -> pageSpeedMeasurer.preformMeasurement(setting)
+            }
+            val saved = measurementRepository.save(measurement)
+            log.debug(saved.toString())
         }
-        return measurementRepository.save(measurement)
+    }
+
+    companion object {
+        val log by logger<DefaultPerformanceMeasurer>()
     }
 
 }

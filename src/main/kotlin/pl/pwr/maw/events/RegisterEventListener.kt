@@ -7,10 +7,10 @@ import pl.pwr.maw.settings.ScheduleService
 @Component
 class RegisterEventListener(
     private val scheduleService: ScheduleService
-) : ApplicationListener<DeregisterEvent> {
+) : ApplicationListener<RegisterEvent> {
 
-    override fun onApplicationEvent(event: DeregisterEvent) {
-        scheduleService.deregister(event.settingsId)
+    override fun onApplicationEvent(event: RegisterEvent) {
+        scheduleService.register(event.setting)
     }
 
 }

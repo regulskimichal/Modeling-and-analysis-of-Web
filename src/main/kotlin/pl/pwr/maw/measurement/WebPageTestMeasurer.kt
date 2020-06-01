@@ -1,6 +1,7 @@
 package pl.pwr.maw.measurement
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -18,7 +19,7 @@ class WebPageTestMeasurer(
     private val objectMapper: ObjectMapper
 ) : PerformanceMeasurer<WebPageTestSetting> {
 
-    override fun preformMeasurement(setting: WebPageTestSetting): WebPageTestMeasurement {
+    override suspend fun preformMeasurement(setting: WebPageTestSetting): WebPageTestMeasurement {
         val uri = UriComponentsBuilder.fromHttpUrl(webPageTestUrl)
             .queryParam("url", setting.pageUrl)
             .queryParam("k", setting.apiKey)
@@ -32,7 +33,7 @@ class WebPageTestMeasurer(
             .flatMap { webClient.get().uri(it.data.jsonUrl).exchange() }
             .flatMap { it.bodyToMono<WebPageTestResponse>() }
             .map { it.asMeasurement() }
-            .block()!!
+            .awaitSingle()
     }
 
     private fun WebPageTestResponse.asMeasurement(): WebPageTestMeasurement = TODO()

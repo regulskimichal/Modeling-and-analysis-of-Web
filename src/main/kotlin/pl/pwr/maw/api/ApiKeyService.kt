@@ -45,7 +45,7 @@ class ApiKeyService(
         val oldApiKey = apiKeyRepository.findByIdOrNull(apiKey.id)
         when {
             oldApiKey == null -> throw EntityNotFoundException<ApiKey>(apiKey.id)
-            oldApiKey.type != apiKey.type -> throw InvalidApiTypeException()
+            oldApiKey.type != apiKey.type -> throw InvalidApiTypeException("ApiKey type cannot be changed")
             oldApiKey.defaultKey && !apiKey.defaultKey -> throw DefaultKeyException.onUpdate()
         }
 

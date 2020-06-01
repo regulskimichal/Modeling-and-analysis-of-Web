@@ -13,7 +13,7 @@ data class LighthouseResultV5(
     val requestedUrl: String,
     val runtimeError: RuntimeError?,
     val runWarnings: List<Any>,
-    val stackPacks: List<StackPack>,
+    val stackPacks: List<StackPack>?,
     val timing: Timing,
     val userAgent: String
 )
