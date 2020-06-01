@@ -71,11 +71,14 @@ data class WebPageTestMeasurement(
 data class PageSpeedMeasurement(
     override var id: Long? = null,
     override var resultType: ResultType,
-    override var strategy: Strategy?,
-    override var userAgent: String?,
-    override var analysisTime: Instant,
-    var largestContentfulPaint: Double?,
-    var firstMeaningfulPaint: Double?
+    override var strategy: Strategy? = null,
+    override var userAgent: String? = null,
+    override var analysisTime: Instant = Instant.now(),
+    var firstContentfulPaint: Int? = null,
+    var firstMeaningfulPaint: Int? = null,
+    var largestContentfulPaint: Int? = null,
+    var maxPotentialFirstInputDelay: Int? = null,
+    var speedIndex: Double? = null
 ) : Measurement(id, resultType, strategy, userAgent, analysisTime) {
 
     @ManyToOne(optional = false)
@@ -90,8 +93,11 @@ data class PageSpeedMeasurement(
         strategy,
         userAgent,
         analysisTime,
+        firstContentfulPaint,
+        firstMeaningfulPaint,
+        maxPotentialFirstInputDelay,
         largestContentfulPaint,
-        firstMeaningfulPaint
+        speedIndex
     )
 
 }

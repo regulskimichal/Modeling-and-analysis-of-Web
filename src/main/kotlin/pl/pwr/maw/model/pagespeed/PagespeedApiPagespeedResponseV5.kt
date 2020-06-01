@@ -11,5 +11,5 @@ data class PagespeedApiPagespeedResponseV5(
     val loadingExperience: PagespeedApiLoadingExperienceV5?,
     val originLoadingExperience: PagespeedApiLoadingExperienceV5?,
     val version: PagespeedVersion?,
-    val error: RuntimeError
+    val error: RuntimeError?
 )

@@ -56,15 +56,18 @@ class PageSpeedMeasurer(
     }
 
     private fun PagespeedApiPagespeedResponseV5.asMeasurement(originalJson: String, setting: PageSpeedSetting) =
-        if (lighthouseResult?.runtimeError != null) {
+        if (lighthouseResult != null && lighthouseResult.runtimeError == null) {
             PageSpeedMeasurement(
                 null,
                 SUCCESS,
                 setting.strategy,
                 lighthouseResult.userAgent,
                 Instant.parse(lighthouseResult.fetchTime),
-                lighthouseResult.audits["largest-contentful-paint"]?.numericValue,
-                lighthouseResult.audits["first-meaningful-paint"]?.numericValue
+                lighthouseResult.audits["first-contentful-paint"]?.numericValue?.toInt(),
+                lighthouseResult.audits["first-meaningful-paint"]?.numericValue?.toInt(),
+                lighthouseResult.audits["largest-contentful-paint"]?.numericValue?.toInt(),
+                lighthouseResult.audits["max-potential-fid"]?.numericValue?.toInt(),
+                lighthouseResult.audits["speed-index"]?.numericValue?.toDouble()
             ).apply {
                 this.setting = setting
                 this.originalResponse = Response(null, originalJson)
@@ -72,12 +75,7 @@ class PageSpeedMeasurer(
         } else {
             PageSpeedMeasurement(
                 null,
-                API_ERROR,
-                null,
-                null,
-                Instant.now(),
-                null,
-                null
+                API_ERROR
             ).apply {
                 this.setting = setting
                 this.originalResponse = Response(null, originalJson)

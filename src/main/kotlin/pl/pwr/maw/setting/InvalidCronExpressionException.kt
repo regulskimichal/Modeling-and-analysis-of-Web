@@ -1,4 +1,4 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.setting
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

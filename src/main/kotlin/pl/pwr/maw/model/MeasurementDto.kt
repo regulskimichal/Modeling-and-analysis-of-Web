@@ -8,7 +8,8 @@ sealed class MeasurementDto(
     open val resultType: ResultType,
     open val strategy: Strategy?,
     open val userAgent: String?,
-    open val analysisTime: Instant
+    open val analysisTime: Instant,
+    val type: ApiType
 )
 
 data class WebPageTestMeasurementDto(
@@ -18,7 +19,7 @@ data class WebPageTestMeasurementDto(
     override val strategy: Strategy?,
     override val userAgent: String?,
     override val analysisTime: Instant
-) : MeasurementDto(id, url, resultType, strategy, userAgent, analysisTime)
+) : MeasurementDto(id, url, resultType, strategy, userAgent, analysisTime, ApiType.WEB_PAGE_TEST)
 
 data class PageSpeedMeasurementDto(
     override val id: Long?,
@@ -27,6 +28,9 @@ data class PageSpeedMeasurementDto(
     override val strategy: Strategy?,
     override val userAgent: String?,
     override val analysisTime: Instant,
-    val largestContentfulPaint: Double?,
-    val firstMeaningfulPaint: Double?
-) : MeasurementDto(id, url, resultType, strategy, userAgent, analysisTime)
+    var firstContentfulPaint: Int?,
+    var firstMeaningfulPaint: Int?,
+    var largestContentfulPaint: Int?,
+    var maxPotentialFirstInputDelay: Int?,
+    var speedIndex: Double?
+) : MeasurementDto(id, url, resultType, strategy, userAgent, analysisTime, ApiType.PAGE_SPEED)

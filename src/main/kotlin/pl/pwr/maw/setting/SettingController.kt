@@ -1,4 +1,4 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.setting
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -24,7 +24,10 @@ class SettingController(
     @GetMapping("/{id}/measurements")
     @ResponseStatus(HttpStatus.OK)
     fun getMeasurementsForSetting(@PathVariable id: Long): List<MeasurementDto> {
-        return settingService.getMeasurements(id)
+        return settingService.getMeasurements(id).asSequence()
+            .map { it.toDto() }
+            .sortedBy { it.id }
+            .toList()
     }
 
     @GetMapping
@@ -39,13 +42,13 @@ class SettingController(
         return settingService.saveSetting(settingDto.toEntity(), settingDto.apiKeyId).toDto()
     }
 
-    @GetMapping("/{id}/enable")
+    @PostMapping("/{id}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun enableSetting(@PathVariable id: Long) {
         settingService.setEnabled(id, true)
     }
 
-    @GetMapping("/{id}/disable")
+    @PostMapping("/{id}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun disableSetting(@PathVariable id: Long) {
         settingService.setEnabled(id, false)

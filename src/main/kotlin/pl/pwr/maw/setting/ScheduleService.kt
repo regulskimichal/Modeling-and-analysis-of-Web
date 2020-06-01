@@ -1,4 +1,4 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.setting
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.scheduling.support.CronTrigger

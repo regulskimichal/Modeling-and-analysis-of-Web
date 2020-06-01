@@ -59,7 +59,11 @@ data class WebPageTestSetting(
         pageUrl,
         apiKey?.id,
         cronExpression,
-        zoneId
+        zoneId,
+        enabled,
+        location,
+        browser,
+        connectivityProfile
     )
 
 }
@@ -83,6 +87,14 @@ data class PageSpeedSetting(
 
     override fun measurements(): Set<Measurement> = measurements
 
-    override fun toDto() = PageSpeedSettingResponseDto(id, pageUrl, apiKey?.id, cronExpression, zoneId)
+    override fun toDto() = PageSpeedSettingResponseDto(
+        id,
+        pageUrl,
+        apiKey?.id,
+        cronExpression,
+        zoneId,
+        enabled,
+        strategy
+    )
 
 }

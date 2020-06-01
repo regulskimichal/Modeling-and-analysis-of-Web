@@ -2,7 +2,7 @@ package pl.pwr.maw.events
 
 import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
-import pl.pwr.maw.settings.ScheduleService
+import pl.pwr.maw.setting.ScheduleService
 
 @Component
 class RegisterEventListener(

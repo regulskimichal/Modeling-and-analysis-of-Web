@@ -1,4 +1,4 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.setting
 
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.support.CronSequenceGenerator
@@ -24,13 +24,8 @@ class SettingService(
             .orElseThrow { throw EntityNotFoundException<Setting>(id) }
     }
 
-    fun getMeasurements(settingId: Long): List<MeasurementDto> {
-        return getSetting(settingId)
-            .measurements()
-            .asSequence()
-            .map { it.toDto() }
-            .sortedBy { it.id }
-            .toList()
+    fun getMeasurements(settingId: Long): Set<Measurement> {
+        return getSetting(settingId).measurements()
     }
 
     fun getAllSettings(): List<Setting> {

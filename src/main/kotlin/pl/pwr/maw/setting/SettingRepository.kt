@@ -1,4 +1,4 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.setting
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
