@@ -1,0 +1,56 @@
+package pl.pwr.maw.model
+
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import java.time.ZoneId
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes(
+    JsonSubTypes.Type(WebPageTestSettingDto::class, name = ApiType.WEB_PAGE_TEST_NAME),
+    JsonSubTypes.Type(PageSpeedSettingDto::class, name = ApiType.PAGE_SPEED_NAME)
+)
+sealed class SettingDto(
+    open val pageUrl: String,
+    open val apiKeyId: Long,
+    open val cronExpression: String,
+    open val zoneId: ZoneId
+) {
+
+    abstract fun toEntity(): Setting
+
+}
+
+data class WebPageTestSettingDto(
+    override val pageUrl: String,
+    override val apiKeyId: Long,
+    override val cronExpression: String,
+    override val zoneId: ZoneId,
+    val location: String?,
+    val browser: Browser?,
+    val connectivityProfile: ConnectivityProfile?
+) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
+
+    override fun toEntity(): Setting = WebPageTestSetting(
+        null,
+        pageUrl,
+        cronExpression,
+        zoneId,
+        true,
+        location,
+        browser,
+        connectivityProfile
+    )
+
+}
+
+data class PageSpeedSettingDto(
+    override val pageUrl: String,
+    override val apiKeyId: Long,
+    override val cronExpression: String,
+    override val zoneId: ZoneId,
+    val strategy: Strategy?
+) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
+
+    override fun toEntity() = PageSpeedSetting(null, pageUrl, cronExpression, zoneId, true, strategy)
+
+}

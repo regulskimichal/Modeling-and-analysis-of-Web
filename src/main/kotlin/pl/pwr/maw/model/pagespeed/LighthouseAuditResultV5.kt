@@ -1,15 +1,15 @@
 package pl.pwr.maw.model.pagespeed
 
 data class LighthouseAuditResultV5(
-    val description: String?,
+    val description: String,
     val details: Map<String, Any>?,
     val displayValue: String?,
     val errorMessage: String?,
     val explanation: String?,
-    val id: String?,
-    val numericValue: Double?,
+    val id: String,
+    val numericValue: String?,
     val score: Any?,
-    val scoreDisplayMode: String?,
-    val title: String?,
+    val scoreDisplayMode: String,
+    val title: String,
     val warnings: Any?
 )

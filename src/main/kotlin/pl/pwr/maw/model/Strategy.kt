@@ -1,4 +1,4 @@
-package pl.pwr.maw.settings
+package pl.pwr.maw.model
 
 enum class Strategy {
     DESKTOP, MOBILE

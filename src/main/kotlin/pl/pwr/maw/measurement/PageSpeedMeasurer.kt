@@ -1,60 +1,89 @@
 package pl.pwr.maw.measurement
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.client.RestTemplate
-import pl.pwr.maw.api.ApiService
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBody
+import org.springframework.web.util.UriComponentsBuilder
+import pl.pwr.maw.commons.logger
+import pl.pwr.maw.model.PageSpeedMeasurement
+import pl.pwr.maw.model.PageSpeedSetting
+import pl.pwr.maw.model.Response
+import pl.pwr.maw.model.ResultType.*
+import pl.pwr.maw.model.pagespeed.PagespeedApiPagespeedResponseV5
+import java.net.URI
+import java.time.Instant
 
 @Service
 @Transactional(readOnly = true)
 class PageSpeedMeasurer(
     @Value("\${api.pageSpeedInsightsUrl}") private val pageSpeedInsightsUrl: String,
-    private val restTemplate: RestTemplate,
-    private val measurementRepository: MeasurementRepository,
-    private val apiService: ApiService
-) : PerformanceMeasurer {
+    private val webClient: WebClient,
+    private val objectMapper: ObjectMapper
+) : PerformanceMeasurer<PageSpeedSetting> {
 
-    override fun preformMeasurement(url: String, runs: Int, firstViewOnly: Boolean): MeasurementResult? =
-        TODO("Not yet implemented")
-
-    /*fun getResults(url: String): Measurement? {
-        val uri = UriComponentsBuilder.fromHttpUrl(pageSpeedInsightsUrl)
-            .queryParam("key", apiSettingsService.getApiKey(Api.PAGE_SPEED))
-            .queryParam("url", url)
-            .build().toUri()
-
-        return webClient.get().uri(uri).exchange()
-            .flatMap { it.bodyToMono<PagespeedApiPagespeedResponseV5>() }
-            .flatMap { measurementRepository.save(it.asMeasurement()) }
-            .awaitSingle()
+    override suspend fun preformMeasurement(setting: PageSpeedSetting): PageSpeedMeasurement? {
+        val url = buildUrl(setting)
+        return preformMeasurement(url, setting)
     }
 
-    private fun PagespeedApiPagespeedResponseV5.asMeasurement(): Measurement {
-        val error = this.lighthouseResult?.runtimeError
+    private fun buildUrl(setting: PageSpeedSetting) = UriComponentsBuilder.fromHttpUrl(pageSpeedInsightsUrl)
+        .queryParam("url", setting.pageUrl)
+        .apply {
+            setting.apiKey?.apiKey?.let {
+                queryParam("key", it)
+            }
 
-        val resultType: ResultType = if (error == null) {
-            ResultType.SUCCESS
+            setting.strategy?.let {
+                queryParam("strategy", it)
+            }
+        }.build().toUri()
+
+    private suspend fun preformMeasurement(url: URI, setting: PageSpeedSetting): PageSpeedMeasurement? {
+        return try {
+            val clientResponse = webClient.get().uri(url).exchange().awaitSingle()
+            val originalJson = clientResponse.awaitBody<String>()
+            val body = objectMapper.readValue<PagespeedApiPagespeedResponseV5>(originalJson)
+            body.asMeasurement(originalJson, setting)
+        } catch (e: Exception) {
+            log.error("Measurement failed", e)
+            null
+        }
+    }
+
+    private fun PagespeedApiPagespeedResponseV5.asMeasurement(originalJson: String, setting: PageSpeedSetting) =
+        if (lighthouseResult != null && lighthouseResult.runtimeError == null) {
+            PageSpeedMeasurement(
+                null,
+                SUCCESS,
+                setting.strategy,
+                lighthouseResult.userAgent,
+                Instant.parse(lighthouseResult.fetchTime),
+                lighthouseResult.audits["first-contentful-paint"]?.numericValue?.toInt(),
+                lighthouseResult.audits["first-meaningful-paint"]?.numericValue?.toInt(),
+                lighthouseResult.audits["largest-contentful-paint"]?.numericValue?.toInt(),
+                lighthouseResult.audits["max-potential-fid"]?.numericValue?.toInt(),
+                lighthouseResult.audits["speed-index"]?.numericValue?.toDouble()
+            ).apply {
+                this.setting = setting
+                this.originalResponse = Response(null, originalJson)
+            }
         } else {
-            if (error.code == "FAILED_DOCUMENT_REQUEST") {
-                ResultType.FAILURE
-            } else {
-                ResultType.WITH_ERRORS
+            PageSpeedMeasurement(
+                null,
+                API_ERROR
+            ).apply {
+                this.setting = setting
+                this.originalResponse = Response(null, originalJson)
             }
         }
 
-        val loadingTime = this.loadingExperience?.metrics?.get("FIRST_INPUT_DELAY_MS")?.distributions?.sumByDouble {
-            it.proportion ?: 0.0
-        }
-
-        return Measurement(
-            lighthouseResult?.requestedUrl,
-            resultType,
-            lighthouseResult?.userAgent,
-            Strategy.DESKTOP,
-            analysisUTCTimestamp?.toInstant(),
-            loadingTime
-        )
-    }*/
+    companion object {
+        val log by logger<PageSpeedMeasurer>()
+    }
 
 }
