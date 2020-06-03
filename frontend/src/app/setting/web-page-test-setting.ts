@@ -1,7 +1,7 @@
-import { Browser } from './browser';
-import { ConnectivityProfile } from './connectivityProfile';
+import {Browser} from './browser';
+import {ConnectivityProfile} from './connectivityProfile';
 
-export interface WebPageTestSetting {
+export class WebPageTestSetting {
   id: number;
   pageUrl: string;
   apiKeyId: number;

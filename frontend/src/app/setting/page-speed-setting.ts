@@ -1,6 +1,6 @@
-import { Strategy } from './strategy';
+import {Strategy} from './strategy';
 
-export interface PageSpeedSetting {
+export class PageSpeedSetting {
   id: number;
   pageUrl: string;
   apiKeyId: number;
