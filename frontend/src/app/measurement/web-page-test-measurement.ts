@@ -1,5 +1,5 @@
-import { Strategy } from '../setting/strategy';
-import { ResultType } from './resultType';
+import {Strategy} from '../setting/strategy';
+import {ResultType} from './result-type';
 
 export interface WebPageTestMeasurement {
   id: number;

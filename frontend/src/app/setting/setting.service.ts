@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ApiKey } from '../api/apiKey';
-import { WebPageTestSetting } from './webPageTestSetting';
-import { PageSpeedSetting } from './pageSpeedSetting';
-import { WebPageTestMeasurement } from '../measurement/webPageTestMeasurement';
-import { PageSpeedMeasurement } from '../measurement/pageSpeedMeasurement';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {WebPageTestSetting} from './web-page-test-setting';
+import {PageSpeedSetting} from './page-speed-setting';
+import {WebPageTestMeasurement} from '../measurement/web-page-test-measurement';
+import {PageSpeedMeasurement} from '../measurement/page-speed-measurement';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   async getSetting(id: number): Promise<WebPageTestSetting | PageSpeedSetting> {
     return this.http.get<WebPageTestSetting | PageSpeedSetting>(`/setting/${id}`).toPromise();

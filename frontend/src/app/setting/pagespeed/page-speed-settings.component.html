@@ -1,0 +1,35 @@
+<mat-table [dataSource]="dataSource" class="mat-elevation-z4 table">
+
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> Id</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pageUrl">
+    <mat-header-cell *matHeaderCellDef> Page URL</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.pageUrl}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="apiKeyId">
+    <mat-header-cell *matHeaderCellDef> API key ID</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.apiKeyId}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="cronExpression">
+    <mat-header-cell *matHeaderCellDef> Cron expression</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.cronExpression}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="zoneId">
+    <mat-header-cell *matHeaderCellDef> Zone</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.zoneId}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="strategy">
+    <mat-header-cell *matHeaderCellDef> Strategy</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.strategy}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
