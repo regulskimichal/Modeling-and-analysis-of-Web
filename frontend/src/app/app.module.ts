@@ -23,6 +23,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatInputModule} from '@angular/material/input';
 import {PageSpeedSettingsComponent} from './setting/pagespeed/page-speed-settings.component';
 import {ApiKeySettingsComponent} from './api/settings/api-key-settings.component';
+import {HomeComponent} from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,8 @@ import {ApiKeySettingsComponent} from './api/settings/api-key-settings.component
     WebPageTestSettingsComponent,
     PageSpeedSettingsComponent,
     ApiKeySettingsComponent,
+    HomeComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,7 @@ import {ApiKeySettingsComponent} from './api/settings/api-key-settings.component
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   providers: [{
     provide: BACKEND_URL,

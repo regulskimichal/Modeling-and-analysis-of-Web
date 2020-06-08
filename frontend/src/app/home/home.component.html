@@ -1,0 +1,42 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>Measurement Scheduler</span>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="content" role="main">
+    <mat-card class="dashboard-card mat-elevation-z4">
+        <mat-card-header>
+            <mat-card-title>
+                API Key Settings
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <app-api-key-settings></app-api-key-settings>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card mat-elevation-z4">
+        <mat-card-header>
+            <mat-card-title>
+                WebPageTest Settings
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <app-web-page-test-settings></app-web-page-test-settings>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card mat-elevation-z4">
+        <mat-card-header>
+            <mat-card-title>
+                PageSpeed Settings
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <app-page-speed-settings></app-page-speed-settings>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<router-outlet></router-outlet>
