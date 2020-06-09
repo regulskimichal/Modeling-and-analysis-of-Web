@@ -6,8 +6,7 @@ import { BACKEND_URL } from './backend.token';
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
 
-  constructor(@Inject(BACKEND_URL) private backendUrl: string) {
-  }
+  constructor(@Inject(BACKEND_URL) private backendUrl: string) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     req = req.clone({
@@ -15,4 +14,5 @@ export class BaseUrlInterceptor implements HttpInterceptor {
     });
     return next.handle(req);
   }
+
 }

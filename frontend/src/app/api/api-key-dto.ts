@@ -1,4 +1,4 @@
-import {ApiType} from './api-type';
+import { ApiType } from './api-type';
 
 export interface ApiKeyDto {
   name: string | null;

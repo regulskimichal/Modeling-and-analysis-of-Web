@@ -1,5 +1,5 @@
-import {ApiType} from './api-type';
-import {ApiTypeProvider} from './api-type-provider';
+import { ApiType } from './api-type';
+import { ApiTypeProvider } from './api-type-provider';
 
 export interface ApiKey extends ApiTypeProvider {
   id: number;

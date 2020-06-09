@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {SettingService} from '../setting.service';
-import {PageSpeedSetting} from '../page-speed-setting';
+import { Component, OnInit } from '@angular/core';
+import { SettingService } from '../setting.service';
+import { PageSpeedSetting } from '../page-speed-setting';
+import { ApiType } from '../../api/api-type';
 
 @Component({
   selector: 'app-page-speed-settings',
@@ -9,19 +10,17 @@ import {PageSpeedSetting} from '../page-speed-setting';
 })
 export class PageSpeedSettingsComponent implements OnInit {
 
-  constructor(private settingService: SettingService) {
-  }
-
   displayedColumns = ['id', 'apiKeyId', 'pageUrl', 'cronExpression', 'zoneId', 'strategy'];
-  dataSource = [];
+  dataSource: PageSpeedSetting[] = [];
 
-  async loadData() {
-    const allSettings = await this.settingService.getAllSettings();
-    this.dataSource = allSettings.filter(element => (element instanceof PageSpeedSetting));
-  }
+  constructor(private settingService: SettingService) {}
 
   async ngOnInit() {
     await this.loadData();
+  }
+
+  async loadData() {
+    this.dataSource = await this.settingService.getAllSettings(ApiType.PAGE_SPEED) as PageSpeedSetting[];
   }
 
 }

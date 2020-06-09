@@ -1,6 +1,5 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {PageSpeedSettingsComponent} from './page-speed-settings.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { PageSpeedSettingsComponent } from './page-speed-settings.component';
 
 describe('PagespeedComponent', () => {
   let component: PageSpeedSettingsComponent;

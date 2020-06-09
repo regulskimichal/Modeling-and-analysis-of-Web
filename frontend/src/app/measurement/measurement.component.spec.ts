@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApiKeySettingsComponent } from './api-key-settings.component';
+import { MeasurementComponent } from './measurement.component';
 
-describe('ApiKeySettingsComponent', () => {
-  let component: ApiKeySettingsComponent;
-  let fixture: ComponentFixture<ApiKeySettingsComponent>;
+describe('MeasurementComponent', () => {
+  let component: MeasurementComponent;
+  let fixture: ComponentFixture<MeasurementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ApiKeySettingsComponent]
+      declarations: [MeasurementComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiKeySettingsComponent);
+    fixture = TestBed.createComponent(MeasurementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

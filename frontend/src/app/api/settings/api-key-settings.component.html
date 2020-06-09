@@ -26,8 +26,5 @@
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"
-           [routerLink]="['show-this-user-page', row.id]"
-           (click)=highlightSelectedRow(row) [ngClass]="{ 'bg-clr': row === selectedRow }"></mat-row>
-  >
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>

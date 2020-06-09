@@ -1,6 +1,5 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {SettingsListComponent} from './settings-list.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { SettingsListComponent } from './settings-list.component';
 
 describe('SettingsListComponent', () => {
   let component: SettingsListComponent;
@@ -10,7 +9,7 @@ describe('SettingsListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SettingsListComponent]
     })
-        .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,23 +1,23 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {ApiKey} from './api-key';
-import {ApiType} from './api-type';
-import {ApiKeyDto} from './api-key-dto';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { ApiKey } from './api-key';
+import { ApiType } from './api-type';
+import { ApiKeyDto } from './api-key-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {
-  }
+
+  constructor(private http: HttpClient) {}
 
   async getApiKey(id: number): Promise<ApiKey> {
     return this.http.get<ApiKey>(`/api-key/${id}`).toPromise();
   }
 
-  async getAllApiKeys(apiKeyType: ApiType | null = null): Promise<ApiKey[]> {
-    if (apiKeyType !== null) {
-      const params = new HttpParams().set('type', apiKeyType);
+  async getAllApiKeys(apiType ?: ApiType): Promise<ApiKey[]> {
+    if (apiType !== undefined) {
+      const params = new HttpParams().set('type', apiType);
       return this.http.get<ApiKey[]>('/api-key', {params}).toPromise();
     } else {
       return this.http.get<ApiKey[]>('/api-key').toPromise();
