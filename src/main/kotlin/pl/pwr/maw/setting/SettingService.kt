@@ -1,5 +1,6 @@
 package pl.pwr.maw.setting
 
+import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.support.CronSequenceGenerator
 import org.springframework.stereotype.Service
@@ -16,7 +17,8 @@ import pl.pwr.maw.model.*
 class SettingService(
     private val apiKeyService: ApiKeyService,
     private val settingRepository: SettingRepository,
-    private val eventPublisher: ApplicationEventPublisher
+    private val eventPublisher: ApplicationEventPublisher,
+    private val csvMapper: CsvMapper
 ) {
 
     fun getSetting(id: Long): Setting {
@@ -24,8 +26,30 @@ class SettingService(
             .orElseThrow { throw EntityNotFoundException<Setting>(id) }
     }
 
-    fun getMeasurements(settingId: Long): Set<Measurement> {
+    fun getMeasurements(settingId: Long): List<MeasurementDto> {
         return getSetting(settingId).measurements()
+            .asSequence()
+            .map { it.toDto() }
+            .sortedBy { it.id }
+            .toList()
+    }
+
+    fun exportMeasurements(settingId: Long): String {
+        val setting = getSetting(settingId)
+        val clazz = when (setting) {
+            is WebPageTestSetting -> WebPageTestMeasurementDto::class.java
+            is PageSpeedSetting -> PageSpeedMeasurementDto::class.java
+        }
+
+        val schema = csvMapper.schemaFor(clazz).rebuild()
+            .setColumnSeparator('\t')
+            .setUseHeader(true)
+            .setStrictHeaders(true)
+            .setNullValue("null")
+            .build()
+
+        val writer = csvMapper.writer(schema)
+        return writer.writeValueAsString(setting.measurements().map { it.toDto() })
     }
 
     fun getAllSettings(): List<Setting> {
