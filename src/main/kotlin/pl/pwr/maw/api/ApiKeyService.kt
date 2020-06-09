@@ -14,15 +14,12 @@ class ApiKeyService(
     private val apiKeyRepository: ApiKeyRepository
 ) {
 
-    fun getAllApiKeys(apiTypeName: String? = null): List<ApiKey> = when (apiTypeName) {
-        null -> apiKeyRepository.findAllByTypeInOrderByIdAsc(ApiType.values)
-        else -> {
-            val apiKeyType = ApiType.values.firstOrNull { it.name.toLowerCase() == apiTypeName.toLowerCase() }
-            if (apiKeyType != null) {
-                apiKeyRepository.findAllByTypeOrderByIdAsc(apiKeyType)
-            } else {
-                throw ApiTypeNotFoundException(apiTypeName)
-            }
+    fun getAllApiKeys(apiTypeName: String? = null): List<ApiKey> {
+        val apiType = ApiType.forName(apiTypeName)
+        return if (apiType != null) {
+            apiKeyRepository.findAllByTypeOrderByIdAsc(apiType)
+        } else {
+            apiKeyRepository.findAll()
         }
     }
 

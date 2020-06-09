@@ -11,9 +11,6 @@ spring:
     password: postgres
     username: postgres
     initialization-mode: always
-  jackson:
-    deserialization:
-      ACCEPT_SINGLE_VALUE_AS_ARRAY: true
   jpa:
     hibernate:
       ddl-auto: update

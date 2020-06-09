@@ -43,8 +43,8 @@ class SettingController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getAllSettings(): List<SettingResponseDto> {
-        return settingService.getAllSettings().map { it.toDto() }
+    fun getAllSettings(@RequestParam("type", required = false) type: String?): List<SettingResponseDto> {
+        return settingService.getAllSettings(type).map { it.toDto() }
     }
 
     @PostMapping(consumes = [APPLICATION_JSON_VALUE])

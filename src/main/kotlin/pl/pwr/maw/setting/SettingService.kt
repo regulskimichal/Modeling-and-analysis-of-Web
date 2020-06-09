@@ -1,5 +1,6 @@
 package pl.pwr.maw.setting
 
+import com.fasterxml.jackson.databind.util.StdDateFormat
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.support.CronSequenceGenerator
@@ -17,9 +18,13 @@ import pl.pwr.maw.model.*
 class SettingService(
     private val apiKeyService: ApiKeyService,
     private val settingRepository: SettingRepository,
-    private val eventPublisher: ApplicationEventPublisher,
-    private val csvMapper: CsvMapper
+    private val eventPublisher: ApplicationEventPublisher
 ) {
+
+    private val csvMapper: CsvMapper = CsvMapper().apply {
+        findAndRegisterModules()
+        dateFormat = StdDateFormat.instance
+    }
 
     fun getSetting(id: Long): Setting {
         return settingRepository.findById(id)
@@ -52,8 +57,13 @@ class SettingService(
         return writer.writeValueAsString(setting.measurements().map { it.toDto() })
     }
 
-    fun getAllSettings(): List<Setting> {
-        return settingRepository.findAll()
+    fun getAllSettings(type: String? = null): List<Setting> {
+        val result = settingRepository.findAll()
+        return when (ApiType.forName(type)) {
+            null -> result
+            ApiType.PAGE_SPEED -> result.filterIsInstance<PageSpeedSetting>()
+            ApiType.WEB_PAGE_TEST -> result.filterIsInstance<WebPageTestSetting>()
+        }
     }
 
     @Transactional

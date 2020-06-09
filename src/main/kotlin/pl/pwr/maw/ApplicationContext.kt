@@ -1,7 +1,5 @@
 package pl.pwr.maw
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import org.springframework.context.annotation.Bean
@@ -17,12 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 @EnableScheduling
 class ApplicationContext : SchedulingConfigurer {
-
-    @Bean
-    fun csvMapper() = CsvMapper().apply {
-        findAndRegisterModules()
-        configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true)
-    }
 
     @Bean
     fun customOpenAPI(): OpenAPI {
