@@ -41,9 +41,7 @@ data class WebPageTestSetting(
     override var cronExpression: String,
     override var zoneId: ZoneId,
     override var enabled: Boolean,
-    var location: String?,
-    var browser: Browser?,
-    var connectivityProfile: ConnectivityProfile?
+    @Embedded var configuration: Configuration?
 ) : Setting(id, pageUrl, cronExpression, zoneId, enabled) {
 
     @ManyToOne
@@ -61,9 +59,7 @@ data class WebPageTestSetting(
         cronExpression,
         zoneId,
         enabled,
-        location,
-        browser,
-        connectivityProfile
+        configuration
     )
 
 }

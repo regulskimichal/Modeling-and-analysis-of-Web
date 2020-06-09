@@ -19,9 +19,6 @@ sealed class Measurement(
     @Column(nullable = false)
     open var resultType: ResultType,
 
-    @Enumerated(EnumType.STRING)
-    open var strategy: Strategy?,
-
     open var userAgent: String?,
 
     @Column(nullable = false)
@@ -45,10 +42,23 @@ sealed class Measurement(
 data class WebPageTestMeasurement(
     override var id: Long? = null,
     override var resultType: ResultType,
-    override var strategy: Strategy?,
-    override var userAgent: String?,
-    override var analysisTime: Instant
-) : Measurement(id, resultType, strategy, userAgent, analysisTime) {
+    override var userAgent: String? = null,
+    override var analysisTime: Instant = Instant.now(),
+    var idxml: String? = null,
+    var loadtime: String? = null,
+    var ttfb: String? = null,
+    var domstart: String? = null,
+    var domend: String? = null,
+    var render: String? = null,
+    var visualComplete: String? = null,
+    var fullyLoaded: String? = null,
+    var requests: String? = null,
+    var firstPaint: String? = null,
+    var speedidx: String? = null,
+    var domnumber: String? = null,
+    var statusCode: Int,
+    var version: String?
+) : Measurement(id, resultType, userAgent, analysisTime) {
 
     @ManyToOne(optional = false)
     lateinit var setting: WebPageTestSetting
@@ -59,7 +69,6 @@ data class WebPageTestMeasurement(
         id,
         setting.pageUrl,
         resultType,
-        strategy,
         userAgent,
         analysisTime
     )
@@ -71,15 +80,15 @@ data class WebPageTestMeasurement(
 data class PageSpeedMeasurement(
     override var id: Long? = null,
     override var resultType: ResultType,
-    override var strategy: Strategy? = null,
     override var userAgent: String? = null,
     override var analysisTime: Instant = Instant.now(),
+    var strategy: Strategy? = null,
     var firstContentfulPaint: Int? = null,
     var firstMeaningfulPaint: Int? = null,
     var largestContentfulPaint: Int? = null,
     var maxPotentialFirstInputDelay: Int? = null,
     var speedIndex: Double? = null
-) : Measurement(id, resultType, strategy, userAgent, analysisTime) {
+) : Measurement(id, resultType, userAgent, analysisTime) {
 
     @ManyToOne(optional = false)
     lateinit var setting: PageSpeedSetting
@@ -90,9 +99,9 @@ data class PageSpeedMeasurement(
         id,
         setting.pageUrl,
         resultType,
-        strategy,
         userAgent,
         analysisTime,
+        strategy,
         firstContentfulPaint,
         firstMeaningfulPaint,
         maxPotentialFirstInputDelay,

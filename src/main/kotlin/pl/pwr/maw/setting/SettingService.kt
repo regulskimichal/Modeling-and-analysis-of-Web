@@ -24,8 +24,12 @@ class SettingService(
             .orElseThrow { throw EntityNotFoundException<Setting>(id) }
     }
 
-    fun getMeasurements(settingId: Long): Set<Measurement> {
+    fun getMeasurements(settingId: Long): List<MeasurementDto> {
         return getSetting(settingId).measurements()
+            .asSequence()
+            .map { it.toDto() }
+            .sortedBy { it.id }
+            .toList()
     }
 
     fun getAllSettings(): List<Setting> {

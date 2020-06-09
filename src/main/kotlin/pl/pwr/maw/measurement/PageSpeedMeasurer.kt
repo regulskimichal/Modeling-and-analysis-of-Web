@@ -46,9 +46,9 @@ class PageSpeedMeasurer(
     private suspend fun preformMeasurement(url: URI, setting: PageSpeedSetting): PageSpeedMeasurement? {
         return try {
             val clientResponse = webClient.get().uri(url).exchange().awaitSingle()
-            val originalJson = clientResponse.awaitBody<String>()
-            val body = objectMapper.readValue<PagespeedApiPagespeedResponseV5>(originalJson)
-            body.asMeasurement(originalJson, setting)
+            val json = clientResponse.awaitBody<String>()
+            val body = objectMapper.readValue<PagespeedApiPagespeedResponseV5>(json)
+            body.asMeasurement(json, setting)
         } catch (e: Exception) {
             log.error("Measurement failed", e)
             null
@@ -60,9 +60,9 @@ class PageSpeedMeasurer(
             PageSpeedMeasurement(
                 null,
                 SUCCESS,
-                setting.strategy,
                 lighthouseResult.userAgent,
                 Instant.parse(lighthouseResult.fetchTime),
+                setting.strategy,
                 lighthouseResult.audits["first-contentful-paint"]?.numericValue?.toInt(),
                 lighthouseResult.audits["first-meaningful-paint"]?.numericValue?.toInt(),
                 lighthouseResult.audits["largest-contentful-paint"]?.numericValue?.toInt(),
@@ -70,7 +70,7 @@ class PageSpeedMeasurer(
                 lighthouseResult.audits["speed-index"]?.numericValue?.toDouble()
             ).apply {
                 this.setting = setting
-                this.originalResponse = Response(null, originalJson)
+                this.originalResponse = Response(value = originalJson)
             }
         } else {
             PageSpeedMeasurement(
@@ -78,7 +78,7 @@ class PageSpeedMeasurer(
                 API_ERROR
             ).apply {
                 this.setting = setting
-                this.originalResponse = Response(null, originalJson)
+                this.originalResponse = Response(value = originalJson)
             }
         }
 

@@ -11,7 +11,7 @@ data class Response(
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "responses_seq_gen")
     @SequenceGenerator(name = "responses_seq_gen", sequenceName = "responses_id_seq")
     @Column(unique = true, updatable = false, nullable = false)
-    var id: Long?,
+    var id: Long? = null,
 
     @Type(type = "text")
     var value: String?

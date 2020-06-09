@@ -24,10 +24,7 @@ class SettingController(
     @GetMapping("/{id}/measurements")
     @ResponseStatus(HttpStatus.OK)
     fun getMeasurementsForSetting(@PathVariable id: Long): List<MeasurementDto> {
-        return settingService.getMeasurements(id).asSequence()
-            .map { it.toDto() }
-            .sortedBy { it.id }
-            .toList()
+        return settingService.getMeasurements(id)
     }
 
     @GetMapping

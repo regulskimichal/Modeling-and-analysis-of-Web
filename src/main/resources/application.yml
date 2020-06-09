@@ -4,11 +4,16 @@ server:
     include-stacktrace: never
 
 spring:
+  codec:
+    max-in-memory-size: 4MB
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     password: postgres
     username: postgres
     initialization-mode: always
+  jackson:
+    deserialization:
+      ACCEPT_SINGLE_VALUE_AS_ARRAY: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,8 +26,9 @@ spring:
 
 logging:
   level:
-    pl.pwr.maw: warn
+    pl.pwr.maw: info
 
 api:
   webPageTestUrl: http://www.webpagetest.org/runtest.php
+  webPageTestLocationsUrl: http://www.webpagetest.org/getLocations.php
   pageSpeedInsightsUrl: https://www.googleapis.com/pagespeedonline/v5/runPagespeed
