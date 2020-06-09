@@ -70,7 +70,21 @@ data class WebPageTestMeasurement(
         setting.pageUrl,
         resultType,
         userAgent,
-        analysisTime
+        analysisTime,
+        idxml,
+        loadtime,
+        ttfb,
+        domstart,
+        domend,
+        render,
+        visualComplete,
+        fullyLoaded,
+        requests,
+        firstPaint,
+        speedidx,
+        domnumber,
+        statusCode,
+        version
     )
 
 }

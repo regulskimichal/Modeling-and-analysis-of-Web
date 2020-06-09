@@ -1,8 +1,11 @@
 package pl.pwr.maw.setting
 
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.MediaType.*
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.pwr.maw.model.MeasurementDto
 import pl.pwr.maw.model.SettingDto
@@ -15,16 +18,27 @@ class SettingController(
     private val settingService: SettingService
 ) {
 
-    @GetMapping("/{id}")
+    @GetMapping("/{settingId}")
     @ResponseStatus(HttpStatus.OK)
-    fun getSetting(@PathVariable id: Long): SettingResponseDto {
-        return settingService.getSetting(id).toDto()
+    fun getSetting(@PathVariable settingId: Long): SettingResponseDto {
+        return settingService.getSetting(settingId).toDto()
     }
 
-    @GetMapping("/{id}/measurements")
+    @GetMapping("/{settingId}/measurements")
     @ResponseStatus(HttpStatus.OK)
-    fun getMeasurementsForSetting(@PathVariable id: Long): List<MeasurementDto> {
-        return settingService.getMeasurements(id)
+    fun getMeasurementsForSetting(@PathVariable settingId: Long): List<MeasurementDto> {
+        return settingService.getMeasurements(settingId)
+    }
+
+    @GetMapping("/{settingId}/measurements/export")
+    @ResponseStatus(HttpStatus.OK)
+    fun exportMeasurementsToCsvForSetting(@PathVariable settingId: Long): ResponseEntity<String> {
+        val headers = HttpHeaders().apply {
+            contentType = MediaType("text", "csv")
+            setContentDispositionFormData("attachment", "measurements_$settingId.csv")
+        }
+
+        return ResponseEntity(settingService.exportMeasurements(settingId), headers, HttpStatus.OK)
     }
 
     @GetMapping
@@ -39,22 +53,22 @@ class SettingController(
         return settingService.saveSetting(settingDto.toEntity(), settingDto.apiKeyId).toDto()
     }
 
-    @PostMapping("/{id}/enable")
+    @PostMapping("/{settingId}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun enableSetting(@PathVariable id: Long) {
-        settingService.setEnabled(id, true)
+    fun enableSetting(@PathVariable settingId: Long) {
+        settingService.setEnabled(settingId, true)
     }
 
-    @PostMapping("/{id}/disable")
+    @PostMapping("/{settingId}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun disableSetting(@PathVariable id: Long) {
-        settingService.setEnabled(id, false)
+    fun disableSetting(@PathVariable settingId: Long) {
+        settingService.setEnabled(settingId, false)
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{settingId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteSettings(@PathVariable id: Long) {
-        settingService.deleteSetting(id)
+    fun deleteSettings(@PathVariable settingId: Long) {
+        settingService.deleteSetting(settingId)
     }
 
     @DeleteMapping

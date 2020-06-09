@@ -16,7 +16,21 @@ data class WebPageTestMeasurementDto(
     override val url: String,
     override val resultType: ResultType,
     override val userAgent: String?,
-    override val analysisTime: Instant
+    override val analysisTime: Instant,
+    val idxml: String? = null,
+    val loadtime: String? = null,
+    val ttfb: String? = null,
+    val domstart: String? = null,
+    val domend: String? = null,
+    val render: String? = null,
+    val visualComplete: String? = null,
+    val fullyLoaded: String? = null,
+    val requests: String? = null,
+    val firstPaint: String? = null,
+    val speedidx: String? = null,
+    val domnumber: String? = null,
+    val statusCode: Int,
+    val version: String?
 ) : MeasurementDto(id, url, resultType, userAgent, analysisTime, ApiType.WEB_PAGE_TEST)
 
 data class PageSpeedMeasurementDto(
