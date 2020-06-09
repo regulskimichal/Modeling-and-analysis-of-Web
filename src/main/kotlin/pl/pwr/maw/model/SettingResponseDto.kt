@@ -18,7 +18,7 @@ data class WebPageTestSettingResponseDto(
     override val cronExpression: String,
     override val zoneId: ZoneId,
     val enabled: Boolean,
-    val configuration: Configuration?
+    val browserConfiguration: BrowserConfiguration?
 ) : SettingResponseDto(id, pageUrl, apiKeyId, cronExpression, zoneId, ApiType.WEB_PAGE_TEST)
 
 data class PageSpeedSettingResponseDto(

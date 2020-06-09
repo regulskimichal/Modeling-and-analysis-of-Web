@@ -25,7 +25,7 @@ data class WebPageTestSettingDto(
     override val apiKeyId: Long,
     override val cronExpression: String,
     override val zoneId: ZoneId,
-    val configuration: Configuration?
+    val browserConfiguration: BrowserConfiguration?
 ) : SettingDto(pageUrl, apiKeyId, cronExpression, zoneId) {
 
     override fun toEntity(): Setting = WebPageTestSetting(
@@ -34,7 +34,7 @@ data class WebPageTestSettingDto(
         cronExpression,
         zoneId,
         true,
-        configuration
+        browserConfiguration
     )
 
 }

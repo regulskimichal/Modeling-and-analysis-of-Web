@@ -1,6 +1,8 @@
 package pl.pwr.maw.model
 
-enum class ConnectivityProfile(val value: String) {
+enum class ConnectivityProfile(
+    val value: String
+) {
     DSL("DSL"),
     CABLE("Cable"),
     FIOS("FIOS"),
