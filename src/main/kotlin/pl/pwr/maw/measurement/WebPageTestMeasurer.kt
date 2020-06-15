@@ -1,7 +1,7 @@
 package pl.pwr.maw.measurement
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import kotlinx.coroutines.Dispatchers.IO
@@ -91,32 +91,50 @@ class WebPageTestMeasurer(
         originalJson: String,
         setting: WebPageTestSetting
     ): WebPageTestMeasurement {
-        if (statusCode == HttpStatus.OK.value() && data != null) {
-            val data = objectMapper.treeToValue<WebPageTestResponseData>(data)!!
-            val requestHeaders = data.runs["1"]["firstView"]["requests"][0]["headers"]["request"] as ArrayNode
-            val userAgent = requestHeaders.map { it.asText() }.find { it.contains("user-agent", ignoreCase = true) }
-
-            return WebPageTestMeasurement(
-                resultType = ResultType.SUCCESS,
-                userAgent = userAgent,
-                analysisTime = data.completed,
-                statusCode = statusCode,
-                version = webPagetestVersion
-            ).apply {
-                this.setting = setting
-                this.originalResponse = Response(value = originalJson)
-            }
+        val measurement = if (statusCode == HttpStatus.OK.value() && data != null) {
+            successfulMeasurement(data)
         } else {
-            return WebPageTestMeasurement(
-                resultType = ResultType.API_ERROR,
-                statusCode = statusCode,
-                version = webPagetestVersion
-            ).apply {
-                this.setting = setting
-                this.originalResponse = Response(value = originalJson)
-            }
+            unsuccessfulMeasurement()
+        }
+
+        return measurement.apply {
+            this.originalResponse = Response(value = originalJson)
+            this.setting = setting
         }
     }
+
+    private fun WebPageTestResponse.successfulMeasurement(objectNode: ObjectNode): WebPageTestMeasurement {
+        val data = objectMapper.treeToValue<WebPageTestResponseData>(objectNode)!!
+        val firstView = data.runs["1"]["firstView"]
+        val requestHeaders = objectMapper.treeToValue<List<String>>(firstView["requests"][0]["headers"]["request"])
+        val userAgent = requestHeaders?.find { it.contains("user-agent", ignoreCase = true) }
+
+        return WebPageTestMeasurement(
+            resultType = ResultType.SUCCESS,
+            userAgent = userAgent,
+            analysisTime = data.completed,
+            idxml = data.id,
+            loadTime = firstView["loadTime"].asDouble().toInt(),
+            ttfb = firstView["TTFB"].asDouble().toInt(),
+            domStart = firstView["domContentLoadedEventStart"].asDouble().toInt(),
+            domEnd = firstView["domContentLoadedEventEnd"].asDouble().toInt(),
+            render = firstView["render"].asDouble().toInt(),
+            visualComplete = firstView["visualComplete"].asDouble().toInt(),
+            fullyLoaded = firstView["fullyLoaded"].asDouble().toInt(),
+            requests = firstView["requestsFull"].asDouble().toInt(),
+            firstPaint = firstView["firstPaint"].asDouble().toInt(),
+            speedIndex = firstView["SpeedIndex"].asDouble().toInt(),
+            domElements = firstView["domElements"].asDouble().toInt(),
+            statusCode = statusCode,
+            version = webPagetestVersion
+        )
+    }
+
+    private fun WebPageTestResponse.unsuccessfulMeasurement(): WebPageTestMeasurement = WebPageTestMeasurement(
+        resultType = ResultType.API_ERROR,
+        statusCode = statusCode,
+        version = webPagetestVersion
+    )
 
     companion object {
         val log by logger<WebPageTestMeasurer>()
