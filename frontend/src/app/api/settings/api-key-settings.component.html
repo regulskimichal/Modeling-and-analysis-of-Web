@@ -1,4 +1,6 @@
-<mat-table [dataSource]="dataSource" class="mat-elevation-z4 table">
+<button (click)="addRow()">Add Row</button>
+
+<mat-table #table [dataSource]="dataSource" class="mat-elevation-z4 table">
 
   <ng-container matColumnDef="id">
     <mat-header-cell *matHeaderCellDef> Id</mat-header-cell>
