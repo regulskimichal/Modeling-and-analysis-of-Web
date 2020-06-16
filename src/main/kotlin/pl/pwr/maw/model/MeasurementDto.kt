@@ -40,9 +40,9 @@ data class PageSpeedMeasurementDto(
     override val userAgent: String?,
     override val analysisTime: Instant,
     val strategy: Strategy?,
-    val firstContentfulPaint: Int?,
-    val firstMeaningfulPaint: Int?,
-    val largestContentfulPaint: Int?,
-    val maxPotentialFirstInputDelay: Int?,
+    val firstContentfulPaint: Double?,
+    val firstMeaningfulPaint: Double?,
+    val largestContentfulPaint: Double?,
+    val maxPotentialFirstInputDelay: Double?,
     val speedIndex: Double?
 ) : MeasurementDto(id, url, resultType, userAgent, analysisTime, ApiType.PAGE_SPEED)

@@ -33,15 +33,21 @@ class WebPageTestMeasurer(
 ) : PerformanceMeasurer<WebPageTestSetting> {
 
     override suspend fun preformMeasurement(setting: WebPageTestSetting): WebPageTestMeasurement? {
-        val webPageTestInitResponse = webClient.get()
+        val initJson = webClient.get()
             .uri(buildUrl(setting))
             .exchange()
             .awaitSingle()
-            .awaitBody<WebPageTestInitResponse>()
+            .awaitBody<String>()
+        val webPageTestInitResponse = objectMapper.readValue<WebPageTestInitResponse>(initJson)
 
         return flow {
+            val url = webPageTestInitResponse.data?.jsonUrl ?: throw WebPageTestInitApiException(
+                initJson,
+                webPageTestInitResponse
+            )
+
             val json = webClient.get()
-                .uri(webPageTestInitResponse.data.jsonUrl)
+                .uri(url)
                 .exchange()
                 .awaitSingle()
                 .awaitBody<String>()
@@ -62,10 +68,13 @@ class WebPageTestMeasurer(
         }.map { (json, response) ->
             response.asMeasurement(json, setting)
         }.catch { e ->
-            if (e is WebPageTestApiException) {
-                emit(e.response.asMeasurement(e.json, setting))
-            } else {
-                log.error(e.message, e)
+            when (e) {
+                is WebPageTestApiException -> emit(e.response.asMeasurement(e.json, setting))
+                is WebPageTestInitApiException -> emit(unsuccessfulMeasurement(e.response.statusCode).apply {
+                    this.originalResponse = Response(value = e.json)
+                    this.setting = setting
+                })
+                else -> log.error(e.message, e)
             }
         }.flowOn(IO).singleOrNull()
     }
@@ -94,7 +103,7 @@ class WebPageTestMeasurer(
         val measurement = if (statusCode == HttpStatus.OK.value() && data != null) {
             successfulMeasurement(data)
         } else {
-            unsuccessfulMeasurement()
+            unsuccessfulMeasurement(statusCode)
         }
 
         return measurement.apply {
@@ -130,10 +139,9 @@ class WebPageTestMeasurer(
         )
     }
 
-    private fun WebPageTestResponse.unsuccessfulMeasurement(): WebPageTestMeasurement = WebPageTestMeasurement(
+    private fun unsuccessfulMeasurement(code: Int) = WebPageTestMeasurement(
         resultType = ResultType.API_ERROR,
-        statusCode = statusCode,
-        version = webPagetestVersion
+        statusCode = code
     )
 
     companion object {

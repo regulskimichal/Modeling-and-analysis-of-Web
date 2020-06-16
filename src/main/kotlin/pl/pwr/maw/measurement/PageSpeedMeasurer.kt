@@ -63,10 +63,10 @@ class PageSpeedMeasurer(
                 lighthouseResult.userAgent,
                 Instant.parse(lighthouseResult.fetchTime),
                 setting.strategy,
-                lighthouseResult.audits["first-contentful-paint"]?.numericValue?.toInt(),
-                lighthouseResult.audits["first-meaningful-paint"]?.numericValue?.toInt(),
-                lighthouseResult.audits["largest-contentful-paint"]?.numericValue?.toInt(),
-                lighthouseResult.audits["max-potential-fid"]?.numericValue?.toInt(),
+                lighthouseResult.audits["first-contentful-paint"]?.numericValue?.toDouble(),
+                lighthouseResult.audits["first-meaningful-paint"]?.numericValue?.toDouble(),
+                lighthouseResult.audits["largest-contentful-paint"]?.numericValue?.toDouble(),
+                lighthouseResult.audits["max-potential-fid"]?.numericValue?.toDouble(),
                 lighthouseResult.audits["speed-index"]?.numericValue?.toDouble()
             ).apply {
                 this.setting = setting
