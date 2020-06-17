@@ -41,7 +41,7 @@ class MeasurementController(
             )
         ]
     )
-    fun getAllMeasurements(@PathVariable id: Long): MeasurementDto {
+    fun getMeasurement(@PathVariable id: Long): MeasurementDto {
         return measurementService.getMeasurement(id).toDto()
     }
 
