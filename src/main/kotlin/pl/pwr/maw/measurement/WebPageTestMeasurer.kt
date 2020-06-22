@@ -90,7 +90,7 @@ class WebPageTestMeasurer(
             .queryParam("f", "json")
             .apply {
                 setting.browserConfiguration?.let {
-                    queryParam("location", "${it.location}:${it.browser}.${it.connectivityProfile.value}")
+                    queryParam("location", "${it.location}:${it.browser}.${it.connectivityProfile?.value}")
                 }
             }
             .build().toUri()

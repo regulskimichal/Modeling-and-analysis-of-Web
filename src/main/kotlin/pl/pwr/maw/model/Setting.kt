@@ -47,7 +47,7 @@ data class WebPageTestSetting(
     @ManyToOne
     override var apiKey: ApiKey? = null
 
-    @OneToMany(mappedBy = "setting")
+    @OneToMany(mappedBy = "setting", cascade = [CascadeType.REMOVE])
     lateinit var measurements: Set<WebPageTestMeasurement>
 
     override fun measurements(): Set<Measurement> = measurements
@@ -78,7 +78,7 @@ data class PageSpeedSetting(
     @ManyToOne
     override var apiKey: ApiKey? = null
 
-    @OneToMany(mappedBy = "setting")
+    @OneToMany(mappedBy = "setting", cascade = [CascadeType.REMOVE])
     lateinit var measurements: Set<PageSpeedMeasurement>
 
     override fun measurements(): Set<Measurement> = measurements

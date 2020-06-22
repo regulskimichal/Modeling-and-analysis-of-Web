@@ -1,0 +1,366 @@
+{
+  "info": {
+    "_postman_id": "39f407c7-a816-4805-9425-dcb7a5590d65",
+    "name": "Web Analysis",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get all API keys",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api-key",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api-key"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all API keys of type",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api-key?type=WEB_PAGE_TEST",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api-key"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "WEB_PAGE_TEST"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get API key",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api-key/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api-key",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Save API key",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Default WebPageTest\",\n    \"apiKey\": \"A.2f62fd1c8064745aba58e3a70b976121\",\n    \"type\": \"WEB_PAGE_TEST\",\n    \"defaultKey\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api-key",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api-key"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update API key",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"name\": \"Default WebPageTest\",\n\t\"apiKey\": \"A.2f62fd1c8064745aba58e3a70b976121\",\n\t\"type\": \"WEB_PAGE_TEST\",\n\t\"defaultKey\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api-key/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api-key",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete API key",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api-key/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api-key",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all settings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/setting",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get setting",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/setting/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Disable setting",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/setting/1/disable",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting",
+            "1",
+            "disable"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Enable setting",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/setting/1/enable",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting",
+            "1",
+            "enable"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get measurements of setting",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/setting/1/measurements",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting",
+            "1",
+            "measurements"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Save setting",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"pageUrl\": \"http://httpstat.us/500\",\n    \"apiKeyId\": 2,\n    \"cronExpression\": \"0,10,20,30,40,50 * * ? * *\",\n    \"zoneId\": \"Europe/Warsaw\",\n    \"type\": \"PAGE_SPEED\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/setting",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete all settings",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/setting",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete setting",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/setting/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "setting",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get measurement",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/measurement/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "measurement",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get browsers and available locations",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/settings/locations?api-key=A.2f62fd1c8064745aba58e3a70b976121",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "settings",
+            "locations"
+          ],
+          "query": [
+            {
+              "key": "api-key",
+              "value": "A.2f62fd1c8064745aba58e3a70b976121"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
